@@ -1,0 +1,70 @@
+.todos {
+
+   &__item-wrapper {
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 5px;
+    gap: 5px;
+  }
+
+  &__item-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  &__btn {
+    max-width: 30px;
+    max-height: 30px;
+
+    &--delete {
+      background-color: #dc3545;
+    }
+  }
+
+  &__title {
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  &__input-draft {
+    font-size: 16px;
+    font-weight: 400;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid rgb(123, 123, 123);
+    outline: none;
+    text-align: left;
+
+    &--error {
+      border-bottom: 1px solid red;
+      color: red;
+    }
+  }
+
+  &__edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+  }
+
+  &__error-message {
+    font-size: 12px;
+    color: red;
+  }
+}
