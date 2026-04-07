@@ -1,10 +1,7 @@
+import type { ResultValidationText } from "../types/validatoinTitle";
+
 export const MIN_TODO_LENGTH = 2
 export const MAX_TODO_LENGTH = 64
-
-export interface ResultValidationText {
-  isValid: boolean;
-  error: string;
-}
 
 export const validationTodoTitle = (title: string): ResultValidationText => {
   const trimmed = title.trim();

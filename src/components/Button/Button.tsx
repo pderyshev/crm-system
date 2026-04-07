@@ -1,7 +1,8 @@
-import { type ButtonHTMLAttributes, type FC, type ReactNode } from "react";
+import { type ButtonHTMLAttributes, type FC, type ReactNode,} from "react";
+
 import "./button.scss";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   icon?: ReactNode;
 }

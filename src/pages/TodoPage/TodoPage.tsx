@@ -18,7 +18,7 @@ export default function TodoPage() {
       />
 
       <TodoListView
-        todoList={todo.filteredTodos}
+        todoList={todo.todos}
         removeTodo={todo.removeTodo}
         toggleTodo={todo.toggleTodo}
         editTodo={todo.editTodo}

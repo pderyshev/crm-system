@@ -1,9 +1,9 @@
 import { type FC } from "react";
-import type { Todo } from "../../api/Todo";
 import { TodoItem } from "../TodoItem/TodoItem";
+import type { Todo, } from "../../types/todo";
 import "./todoList.scss";
 
-interface TodoListProps {
+export interface TodoListProps {
   todoList: Todo[];
   removeTodo: (id: number) => void;
   toggleTodo: (id: number) => void;

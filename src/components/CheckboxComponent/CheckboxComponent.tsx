@@ -1,7 +1,7 @@
 import { type FC } from "react";
 import "./checkbox.scss";
 
-interface CheckboxProps {
+export interface CheckboxProps {
   checked: boolean;
   onChange: () => void;
 }

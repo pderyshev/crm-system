@@ -1,12 +1,12 @@
 import { useState, type FC } from "react";
-import type { Todo } from "../../api/Todo";
 import { CheckboxComponent } from "../CheckboxComponent/CheckboxComponent";
 import { Button } from "../Button/Button";
 import { validationTodoTitle } from "../../helpers/validationTitle";
 import { CancelIcon, DeleteIcon, EditIcon, SaveIcon } from "../../assets/iсons";
 import "./TodoItem.scss"
+import type { Todo } from "../../types/todo";
 
-interface TodoViewProps {
+export interface TodoViewProps {
   todo: Todo;
   removeTodo: (id: number) => void;
   toggleTodo: (id: number) => void;

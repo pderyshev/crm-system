@@ -1,7 +1,7 @@
-export type FilterType = "all" | "completed" | "inWork";
+import type { FilterType } from "../../types/filter";
 import "./todoFilter.scss";
 
-interface FilterProps {
+export interface FilterProps {
   filter: FilterType;
   setFilter: (f: FilterType) => void;
   counts: { all: number, completed: number, inWork: number };

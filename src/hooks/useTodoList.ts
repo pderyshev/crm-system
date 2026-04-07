@@ -3,77 +3,61 @@ import {
   fetchTodoList,
   responseNewTodo,
   deleteTodo,
-  type TodoList,
-  updateTodo
+  updateTodo,
 } from "../api/Todo";
-import type { FilterType } from "../components/TodoFilter/TodoFilter";
-
-interface IdleRequestState { status: "idle"; }
-interface LoadingRequestState { status: "pending"; }
-interface SuccessRequestState { status: "success"; data: TodoList; }
-interface ErrorRequestState { status: "error"; error: unknown; }
-
-type RequestState =
-  | IdleRequestState
-  | LoadingRequestState
-  | SuccessRequestState
-  | ErrorRequestState;
+import type { FilterType } from "../types/filter";
+import type { RequestState } from "../types/requestState";
 
 export function useTodoList() {
   const [state, setState] = useState<RequestState>({ status: "idle" });
   const [filter, setFilter] = useState<FilterType>("all")
 
   // Загрузка списка задач
-  const loadTodoList = async () => {
+  const loadTodoList = async (currentFilter = filter) => {
     setState({ status: "pending" });
 
     try {
-      const data = await fetchTodoList();
-      setState({ status: "success", data: data.data });
+      const data = await fetchTodoList(currentFilter);
+      setState({
+        status: "success",
+        data: data.data,
+        info: data.info ?? { all: 0, completed: 0, inWork: 0 }
+      });
     } catch (error) {
       setState({ status: "error", error });
     }
   };
 
   useEffect(() => {
-    loadTodoList();
-  }, []);
+    loadTodoList(filter);
+  }, [filter]);
 
   // Добавление задачи
   const addTodo = async (title: string) => {
     try {
       await responseNewTodo({ title, isDone: false });
-      await loadTodoList(); // Обновляем список задач после добавления новой задачи
+      await loadTodoList(filter); // Обновляем список задач после добавления новой задачи
     } catch (error) {
       console.error(error);
     }
   }
 
-  // Фильтрация по статусу задачи
-  const filteredTodos =
+  const todos =
     state.status === "success"
-      ? state.data.filter(todo => {
-        if (filter === "completed") return todo.isDone;
-        if (filter === "inWork") return !todo.isDone
-        return true
-      })
+      ? state.data 
       : [];
 
   // Счетчики
   const counts =
     state.status === "success"
-      ? {
-        all: state.data.length,
-        completed: state.data.filter(t => t.isDone).length,
-        inWork: state.data.filter(t => !t.isDone).length,
-      }
+      ? state.info
       : { all: 0, completed: 0, inWork: 0 }
 
   // Удаление задачи
   const removeTodo = async (id: number) => {
     try {
       await deleteTodo(id);
-      await loadTodoList(); // Обновляем список задач после удаления задачи
+      await loadTodoList(filter); // Обновляем список задач после удаления задачи
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +67,7 @@ export function useTodoList() {
   const editTodo = async (id: number, title: string) => {
     try {
       await updateTodo(id, { title });
-      await loadTodoList(); // Обновляем список задач после изменения
+      await loadTodoList(filter); // Обновляем список задач после изменения
     } catch (error) {
       console.error(error);
     }
@@ -102,7 +86,7 @@ export function useTodoList() {
         isDone: !current?.isDone
       });
 
-      await loadTodoList(); // Обновляем список задач после переключения флага
+      await loadTodoList(filter); // Обновляем список задач после переключения флага
     } catch (error) {
       console.error(error);
     };
@@ -112,9 +96,9 @@ export function useTodoList() {
     state,
     loadTodoList,
     addTodo,
+    todos,
     filter,
     setFilter,
-    filteredTodos,
     counts,
     removeTodo,
     editTodo,
