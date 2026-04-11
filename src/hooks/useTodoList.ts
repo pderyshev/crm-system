@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-  fetchTodoList,
+  getTodos,
   responseNewTodo,
   deleteTodo,
   updateTodo,
@@ -17,7 +17,7 @@ export function useTodoList() {
     setState({ status: "pending" });
 
     try {
-      const data = await fetchTodoList(currentFilter);
+      const data = await getTodos(currentFilter);
       setState({
         status: "success",
         data: data.data,

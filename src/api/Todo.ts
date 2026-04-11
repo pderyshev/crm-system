@@ -6,7 +6,7 @@ import type {
   TodoRequest
 } from "../types/todo";
 
-export function fetchTodoList(filter: FilterTodo): Promise<MetaResponse<Todo, TodoInfo>> {
+export function getTodos(filter: FilterTodo): Promise<MetaResponse<Todo, TodoInfo>> {
   return fetch(`https://easydev.club/api/v1/todos?filter=${filter}`)
     .then((response) => response.json())
 }
