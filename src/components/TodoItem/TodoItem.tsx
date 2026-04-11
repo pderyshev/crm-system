@@ -99,11 +99,13 @@ export const TodoItem: FC<TodoViewProps> = ({
             <IconButton
               icon={SaveIcon()}
               onClick={handleSaveEdit}
+              variant="primary"
               className="todos__btn todos__btn--edit"
             />
             <IconButton
               icon={CancelIcon()}
               onClick={handleCancelEdit}
+              variant="danger"
               className="todos__btn todos__btn--delete"
             />
           </>
@@ -112,11 +114,13 @@ export const TodoItem: FC<TodoViewProps> = ({
             <IconButton
               icon={EditIcon()}
               onClick={handleStartEdit}
+              variant="primary"
               className="todos__btn todos__btn--edit"
             />
             <IconButton
               icon={DeleteIcon()}
               onClick={handleDeleteTodo}
+              variant="danger"
               className="todos__btn todos__btn--delete"
             />
           </>

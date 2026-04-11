@@ -4,6 +4,7 @@ import "./button.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
+  variant?: "primary" | "danger" | "default";
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -11,13 +12,15 @@ export const Button: FC<ButtonProps> = ({
   children,
   type = "button",
   disabled = false,
-  className = "",
+  variant = "default",
   ...props
 }) => {
+  const variantClass = variant !== "default" ? `button--${variant}` : "";
+
   return (
     <button
     {...props}
-    className={`button ${className}`.trim()} 
+    className={`button ${variantClass}`.trim()} 
     type={type} 
     disabled={disabled}   
     >

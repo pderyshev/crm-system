@@ -45,7 +45,7 @@ export const CreateTodo = ({ onTodoCreated } : CreateTodoPropos) => {
         {/* В случае ошибки валидации - показываем сообщение */}
         {error && <p className="todo-form__error">{error}</p>} 
       </div>
-      <Button label="Добавить" type="submit" className="todo-form__btn" />
+      <Button variant="primary" label="Добавить" type="submit" className="todo-form__btn" />
     </form>
   )
 }
