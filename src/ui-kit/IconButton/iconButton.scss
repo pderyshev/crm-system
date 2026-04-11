@@ -8,10 +8,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.3s ease-in;
+  transition: background-color 0.3s ease-in;
 
   &:hover {
-    opacity: 0.6;
+    background-color: #0056b3;
   }
 
   &__icon {
