@@ -10,58 +10,56 @@ import {
 import "./todoPage.scss";
 import { useState, useEffect } from "react";
 import type { RequestState } from "../../types/requestState";
-import type { FilterTodo } from "../../types/todo";
+import type { FilterTodo, MetaResponse, Todo, TodoInfo } from "../../types/todo";
 
 export default function TodoPage() {
-  const [state, setState] = useState<RequestState>({ status: "idle" });
-  const [filter, setFilter] = useState<FilterTodo>("all")
+  const [pageState, setPageState] = useState<RequestState>({ status: "idle" });
+  const [filterTodo, setFilterTodo] = useState<FilterTodo>("all")
+  const [todoData, setTodoData] = useState<MetaResponse<Todo, TodoInfo>>();
 
   // Загрузка списка задач
-  const loadTodoList = async (currentFilter = filter) => {
-    setState({ status: "pending" });
+  const loadTodoList = async (currentFilter = filterTodo) => {
+    setPageState({ status: "pending" });
 
     try {
       const data = await getTodos(currentFilter);
-      setState({
-        status: "success",
-        data: data.data,
-        info: data.info ?? { all: 0, completed: 0, inWork: 0 }
-      });
+      setTodoData(data);
+      setPageState({ status: "success", });
     } catch (error) {
-      setState({ status: "error", error });
+      setPageState({ status: "error", error });
     }
   };
 
   useEffect(() => {
-    loadTodoList(filter);
-  }, [filter]);
+    loadTodoList(filterTodo);
+  }, [filterTodo]);
 
   // Добавление задачи
   const addTodo = async (title: string) => {
     try {
       await createTodo({ title, isDone: false });
-      await loadTodoList(filter); // Обновляем список задач после добавления новой задачи
+      await loadTodoList(filterTodo); // Обновляем список задач после добавления новой задачи
     } catch (error) {
       console.error(error);
     }
   }
 
   const todos =
-    state.status === "success"
-      ? state.data
+    pageState.status === "success"
+      ? todoData?.data
       : [];
 
   // Счетчики
   const counts =
-    state.status === "success"
-      ? state.info
+    pageState.status === "success"
+      ? todoData?.info
       : { all: 0, completed: 0, inWork: 0 }
 
   // Удаление задачи
   const removeTodo = async (id: number) => {
     try {
       await deleteTodo(id);
-      await loadTodoList(filter); // Обновляем список задач после удаления задачи
+      await loadTodoList(filterTodo); // Обновляем список задач после удаления задачи
     } catch (error) {
       console.error(error);
     }
@@ -71,7 +69,7 @@ export default function TodoPage() {
   const editTodo = async (id: number, title: string) => {
     try {
       await updateTodo(id, { title });
-      await loadTodoList(filter); // Обновляем список задач после изменения
+      await loadTodoList(filterTodo); // Обновляем список задач после изменения
     } catch (error) {
       console.error(error);
     }
@@ -79,9 +77,9 @@ export default function TodoPage() {
 
   // Переключение флага о выполнении задачи
   const toggleTodo = async (id: number) => {
-    if (state.status !== "success") return;
+    if (pageState.status !== "success") return;
 
-    const current = state.data.find((todo) => {
+    const current = todoData?.data.find((todo) => {
       return todo.id === id
     });
 
@@ -90,7 +88,7 @@ export default function TodoPage() {
         isDone: !current?.isDone
       });
 
-      await loadTodoList(filter); // Обновляем список задач после переключения флага
+      await loadTodoList(filterTodo); // Обновляем список задач после переключения флага
     } catch (error) {
       console.error(error);
     };
@@ -101,13 +99,13 @@ export default function TodoPage() {
       <CreateTodo addTodo={addTodo} />
 
       <TodoFilter
-        filter={filter}
-        setFilter={setFilter}
-        counts={counts}
+        filter={filterTodo}
+        setFilter={setFilterTodo}
+        counts={todoData?.info || { all: 0, completed: 0, inWork: 0 }}
       />
 
       <TodoListView
-        todoList={todos}
+        todoList={todoData?.data || []}
         removeTodo={removeTodo}
         toggleTodo={toggleTodo}
         editTodo={editTodo}
