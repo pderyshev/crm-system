@@ -1,27 +1,34 @@
 import { useState, type FC } from "react";
-import { CheckboxComponent } from "../CheckboxComponent/CheckboxComponent";
+import { ToogleCheckbox } from "../ToogleCheckbox/ToogleCheckbox";
 import { Button } from "../Button/Button";
 import { validationTodoTitle } from "../../helpers/validationTitle";
 import { CancelIcon, DeleteIcon, EditIcon, SaveIcon } from "../../assets/iсons";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
+import { deleteTodo, updateTodo } from "../../api/Todo";
 
 export interface TodoViewProps {
   todo: Todo;
-  removeTodo: (id: number) => void;
-  toggleTodo: (id: number) => void;
-  editTodo: (id: number, title: string) => void;
+  updateTodoList: () => void;
 }
 
 export const TodoItem: FC<TodoViewProps> = ({
   todo,
-  removeTodo,
-  toggleTodo,
-  editTodo
+  updateTodoList
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [draftTitle, setDraftTitle] = useState(todo.title);
   const [error, setError] = useState("");
+
+  const handleDeleteTodo = async () => {
+    try {
+      await deleteTodo(todo.id)
+      updateTodoList();
+    } catch (error) {
+      console.error(error);
+      alert("Ошибка при удалении задачи, попробуйте еще раз")
+    }
+  }
 
   const handleStartEdit = () => {
     setDraftTitle(todo.title);
@@ -35,7 +42,7 @@ export const TodoItem: FC<TodoViewProps> = ({
     setIsEditing(false);
   }
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     const result = validationTodoTitle(draftTitle);
 
     if (!result.isValid) {
@@ -43,17 +50,24 @@ export const TodoItem: FC<TodoViewProps> = ({
       return;
     }
 
-    editTodo(todo.id, result.isValid ? draftTitle.trim() : draftTitle);
-    setIsEditing(false);
-    setError("");
+    try {
+      await updateTodo(todo.id, { title: draftTitle.trim() })
+      setIsEditing(false);
+      setError("");
+      updateTodoList();
+    } catch (error) {
+      console.error(error);
+      alert("Не удалось сохранить изменения, попробуйте еще раз")
+    }
   }
 
   return (
     <div className="todos__item-wrapper">
       <div className="todos__item-left">
-        <CheckboxComponent
-          checked={todo.isDone}
-          onChange={() => toggleTodo(todo.id)}
+        <ToogleCheckbox
+          id={todo.id}
+          isDone={todo.isDone}
+          updateTodoList={updateTodoList}
         />
         <div className="todos__edit-warpper">
           {isEditing ? (
@@ -102,7 +116,7 @@ export const TodoItem: FC<TodoViewProps> = ({
             />
             <Button
               icon={DeleteIcon()}
-              onClick={() => removeTodo(todo.id)}
+              onClick={handleDeleteTodo}
               className="todos__btn todos__btn--delete"
             />
           </>

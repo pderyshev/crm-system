@@ -2,12 +2,17 @@ import { useState } from "react"
 import { validationTodoTitle } from "../../helpers/validationTitle"
 import { Button } from "../Button/Button"
 import "./createTodo.scss"
+import { createTodo } from "../../api/Todo";
 
-export const CreateTodo = ({ addTodo } : { addTodo: (todo: string) => void }) => {
+interface CreateTodoPropos {
+  onTodoCreated: () => void;
+}
+
+export const CreateTodo = ({ onTodoCreated } : CreateTodoPropos) => {
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const result = validationTodoTitle(value)
@@ -17,9 +22,15 @@ export const CreateTodo = ({ addTodo } : { addTodo: (todo: string) => void }) =>
       return
     }
 
-    addTodo(value.trim())
-    setValue("") // После добавления задачи очищаем поле ввода
-    setError("") // Очищаем ошибку после успешного добавления задачи
+    try {
+      await createTodo({ title: value.trim(), isDone: false })
+      setValue("")
+      setError("")
+      onTodoCreated()
+    } catch (error) {
+      console.error(error);
+      setError("Не удалось создать задачу, повторите попытку")
+    }
   }
 
   return (
