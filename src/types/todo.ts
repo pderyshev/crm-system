@@ -26,5 +26,9 @@ export interface MetaResponse<T, N> {
 
 export type TodoList = Todo[];
 
+export type FilterTodo = "all" | "completed" | "inWork";
+
+
+
 
 

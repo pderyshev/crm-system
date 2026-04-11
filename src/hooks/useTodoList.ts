@@ -5,12 +5,12 @@ import {
   deleteTodo,
   updateTodo,
 } from "../api/Todo";
-import type { FilterType } from "../types/filter";
+import type { FilterTodo } from "../types/todo";
 import type { RequestState } from "../types/requestState";
 
 export function useTodoList() {
   const [state, setState] = useState<RequestState>({ status: "idle" });
-  const [filter, setFilter] = useState<FilterType>("all")
+  const [filter, setFilter] = useState<FilterTodo>("all")
 
   // Загрузка списка задач
   const loadTodoList = async (currentFilter = filter) => {

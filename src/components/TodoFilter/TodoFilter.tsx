@@ -1,9 +1,9 @@
-import type { FilterType } from "../../types/filter";
+import type { FilterTodo } from "../../types/todo";
 import "./todoFilter.scss";
 
 export interface FilterProps {
-  filter: FilterType;
-  setFilter: (f: FilterType) => void;
+  filter: FilterTodo;
+  setFilter: (f: FilterTodo) => void;
   counts: { all: number, completed: number, inWork: number };
 };
 
