@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   getTodos,
-  responseNewTodo,
+  createTodo,
   deleteTodo,
   updateTodo,
 } from "../api/Todo";
@@ -35,7 +35,7 @@ export function useTodoList() {
   // Добавление задачи
   const addTodo = async (title: string) => {
     try {
-      await responseNewTodo({ title, isDone: false });
+      await createTodo({ title, isDone: false });
       await loadTodoList(filter); // Обновляем список задач после добавления новой задачи
     } catch (error) {
       console.error(error);

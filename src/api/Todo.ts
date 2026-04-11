@@ -1,14 +1,19 @@
-import type { FilterTodo } from "../types/todo";
 import type {
   MetaResponse,
   Todo,
   TodoInfo,
-  TodoRequest
+  TodoRequest,
+  FilterTodo
 } from "../types/todo";
 
-export function getTodos(filter: FilterTodo): Promise<MetaResponse<Todo, TodoInfo>> {
-  return fetch(`https://easydev.club/api/v1/todos?filter=${filter}`)
-    .then((response) => response.json())
+export function getTodos(filterTodo: FilterTodo): Promise<MetaResponse<Todo, TodoInfo>> {
+  return fetch(`https://easydev.club/api/v1/todos?filter=${filterTodo}`)
+    .then((response) => {
+    if (!response.ok) {
+      throw new Error("Failed to get todo")
+    }
+    return response.json()
+  })
 }
 
 export function deleteTodo(id: number): Promise<void> {
@@ -29,26 +34,27 @@ async function validateTodoResponse(response: Response): Promise<Response> {
   return response
 }
 
-export async function responseNewTodo(todo: TodoRequest): Promise<void> {
+export async function createTodo(todoRequest: TodoRequest): Promise<Todo> {
   return fetch("https://easydev.club/api/v1/todos", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(todo)
+    body: JSON.stringify(todoRequest)
   })
     .then(validateTodoResponse)
-    .then(() => undefined)
+    .then((response) => response.json())
 }
 
-export function updateTodo(id: number, data: TodoRequest): Promise<void> {
+export function updateTodo(id: number, todoRequest: TodoRequest): Promise<Todo> {
   return fetch(`https://easydev.club/api/v1/todos/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify(todoRequest)
   }).then((response) => {
     if (!response.ok) throw new Error("Failed to update todo")
+    return response.json()
   })
 }
