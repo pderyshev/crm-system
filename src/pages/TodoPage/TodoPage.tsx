@@ -31,17 +31,6 @@ export default function TodoPage() {
     loadTodoList(filterTodo);
   }, [filterTodo]);
 
-  const todos =
-    pageState.status === "success"
-      ? todoData?.data
-      : [];
-
-  // Счетчики
-  const counts =
-    pageState.status === "success"
-      ? todoData?.info
-      : { all: 0, completed: 0, inWork: 0 }
-
   return (
     <div className="todos">
       <CreateTodo onTodoCreated={loadTodoList} />
