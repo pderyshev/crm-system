@@ -97,32 +97,38 @@ export const TodoItem: FC<TodoViewProps> = ({
         {isEditing ? (
           <>
             <IconButton
-              icon={SaveIcon()}
               onClick={handleSaveEdit}
               variant="primary"
               className="todos__btn todos__btn--edit"
-            />
+            >
+              <SaveIcon />
+            </IconButton>
+
             <IconButton
-              icon={CancelIcon()}
               onClick={handleCancelEdit}
               variant="danger"
               className="todos__btn todos__btn--delete"
-            />
+            >
+              <CancelIcon />
+            </IconButton>
           </>
         ) : (
           <>
             <IconButton
-              icon={EditIcon()}
               onClick={handleStartEdit}
               variant="primary"
               className="todos__btn todos__btn--edit"
-            />
+            >
+              <EditIcon />
+            </IconButton>
+
             <IconButton
-              icon={DeleteIcon()}
               onClick={handleDeleteTodo}
               variant="danger"
               className="todos__btn todos__btn--delete"
-            />
+            >
+              <DeleteIcon />
+            </IconButton>
           </>
         )}
       </div>

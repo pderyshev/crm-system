@@ -3,12 +3,10 @@ import { type ButtonHTMLAttributes, type FC, type ReactNode, } from "react";
 import "./iconButton.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  icon?: ReactNode;
   variant?: "primary" |  "danger" | "default";
 }
 
 export const IconButton: FC<ButtonProps> = ({
-  icon,
   children,
   type = "button",
   disabled = false,
@@ -24,7 +22,6 @@ export const IconButton: FC<ButtonProps> = ({
       type={type}
       disabled={disabled}
     >
-      {icon && <span className="button__icon">{icon}</span>}
       {children}
     </button>
   );
