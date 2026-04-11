@@ -16,7 +16,9 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoPropos) => {
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = validationTodoTitle(value)
+    const trimmedTitle = value.trim()
+
+    const result = validationTodoTitle(trimmedTitle)
 
     if (!result.isValid) {
       setError(result.error)
@@ -24,7 +26,7 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoPropos) => {
     }
 
     try {
-      await createTodo({ title: value.trim(), isDone: false })
+      await createTodo({ title: trimmedTitle, isDone: false })
       setValue("")
       setError("")
       onTodoCreated()
