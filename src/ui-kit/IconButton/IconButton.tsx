@@ -1,14 +1,12 @@
 import { type ButtonHTMLAttributes, type FC, type ReactNode,} from "react";
 
-import "./button.scss";
+import "./iconButton.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  label?: string;
   icon?: ReactNode;
 }
 
-export const Button: FC<ButtonProps> = ({
-  label,
+export const IconButton: FC<ButtonProps> = ({
   icon,
   children,
   type = "button",
@@ -19,12 +17,11 @@ export const Button: FC<ButtonProps> = ({
   return (
     <button
     {...props}
-    className={`button ${className}`.trim()} 
+    className={`icon-button ${className}`.trim()} 
     type={type} 
     disabled={disabled}   
     >
       {icon && <span className="button__icon">{icon}</span>}
-      {label && <span className="button__label">{label}</span>}
       {children}
     </button>
   );

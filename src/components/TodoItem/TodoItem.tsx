@@ -1,11 +1,11 @@
 import { useState, type FC } from "react";
 import { ToogleCheckbox } from "../ToogleCheckbox/ToogleCheckbox";
-import { Button } from "../Button/Button";
 import { validationTodoTitle } from "../../helpers/validationTitle";
 import { CancelIcon, DeleteIcon, EditIcon, SaveIcon } from "../../assets/iсons";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
 import { deleteTodo, updateTodo } from "../../api/Todo";
+import { IconButton } from "../../ui-kit/IconButton/IconButton";
 
 export interface TodoViewProps {
   todo: Todo;
@@ -96,12 +96,12 @@ export const TodoItem: FC<TodoViewProps> = ({
       <div className="todos__inner">
         {isEditing ? (
           <>
-            <Button
+            <IconButton
               icon={SaveIcon()}
               onClick={handleSaveEdit}
               className="todos__btn todos__btn--edit"
             />
-            <Button
+            <IconButton
               icon={CancelIcon()}
               onClick={handleCancelEdit}
               className="todos__btn todos__btn--delete"
@@ -109,12 +109,12 @@ export const TodoItem: FC<TodoViewProps> = ({
           </>
         ) : (
           <>
-            <Button
+            <IconButton
               icon={EditIcon()}
               onClick={handleStartEdit}
               className="todos__btn todos__btn--edit"
             />
-            <Button
+            <IconButton
               icon={DeleteIcon()}
               onClick={handleDeleteTodo}
               className="todos__btn todos__btn--delete"

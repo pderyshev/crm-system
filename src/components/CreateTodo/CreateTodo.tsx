@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { validationTodoTitle } from "../../helpers/validationTitle"
-import { Button } from "../Button/Button"
+import { Button } from "../../ui-kit/Button/Button"
 import "./createTodo.scss"
 import { createTodo } from "../../api/Todo";
 
