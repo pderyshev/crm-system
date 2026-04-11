@@ -3,12 +3,13 @@ import { validationTodoTitle } from "../../helpers/validationTitle"
 import { Button } from "../../ui-kit/Button/Button"
 import "./createTodo.scss"
 import { createTodo } from "../../api/Todo";
+import { TodoInput } from "../../ui-kit/Input/Input";
 
 interface CreateTodoPropos {
   onTodoCreated: () => void;
 }
 
-export const CreateTodo = ({ onTodoCreated } : CreateTodoPropos) => {
+export const CreateTodo = ({ onTodoCreated }: CreateTodoPropos) => {
   const [value, setValue] = useState("")
   const [error, setError] = useState("")
 
@@ -17,7 +18,7 @@ export const CreateTodo = ({ onTodoCreated } : CreateTodoPropos) => {
 
     const result = validationTodoTitle(value)
 
-    if(!result.isValid) {
+    if (!result.isValid) {
       setError(result.error)
       return
     }
@@ -35,16 +36,14 @@ export const CreateTodo = ({ onTodoCreated } : CreateTodoPropos) => {
 
   return (
     <form className="todo-form" onSubmit={handleSubmit}>
-      <div className="todo-form__wrapper">
-        <input
-          className="todo-form__input"
+        <TodoInput
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={setValue}
+          error={error}
           placeholder="Введите задачу"
         />
         {/* В случае ошибки валидации - показываем сообщение */}
-        {error && <p className="todo-form__error">{error}</p>} 
-      </div>
+        {error && <p className="todo-form__error">{error}</p>}
       <Button variant="primary" label="Добавить" type="submit" className="todo-form__btn" />
     </form>
   )
