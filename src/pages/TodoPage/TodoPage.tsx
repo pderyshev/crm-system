@@ -10,7 +10,7 @@ import type { RequestState } from "../../types/requestState";
 import type { FilterTodo, MetaResponse, Todo, TodoInfo } from "../../types/todo";
 
 export default function TodoPage() {
-  const [pageState, setPageState] = useState<RequestState>({ status: "idle" });
+  const [, setPageState] = useState<RequestState>({ status: "idle" });
   const [filterTodo, setFilterTodo] = useState<FilterTodo>("all")
   const [todoData, setTodoData] = useState<MetaResponse<Todo, TodoInfo>>();
 

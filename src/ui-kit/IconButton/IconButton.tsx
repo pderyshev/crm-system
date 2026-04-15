@@ -1,4 +1,4 @@
-import { type ButtonHTMLAttributes, type FC, type ReactNode, } from "react";
+import { type ButtonHTMLAttributes, type FC, } from "react";
 
 import "./iconButton.scss";
 
