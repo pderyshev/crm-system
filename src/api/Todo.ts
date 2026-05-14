@@ -1,53 +1,53 @@
+import axios from "axios";
+
 import type {
-  MetaResponse,
   Todo,
-  TodoInfo,
   TodoRequest,
   FilterTodo
 } from "../types/todo";
 
-export function getTodos(filterTodo: FilterTodo): Promise<MetaResponse<Todo, TodoInfo>> {
-  return fetch(`https://easydev.club/api/v1/todos?filter=${filterTodo}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to get todo")
-      }
-      return response.json()
-    })
-}
+const api = axios.create({
+  baseURL: "https://easydev.club/api/v1/",
+  headers: {
+    "Content-Type": "application/json"
+  }
+})
 
-export function deleteTodo(id: number): Promise<void> {
-  return fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: "DELETE",
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error("Failed to delete todo")
-    }
-  })
-}
-
-export async function createTodo(todoRequest: TodoRequest): Promise<Todo> {
-  return fetch("https://easydev.club/api/v1/todos", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
+export async function getTodos(filterTodo: FilterTodo) {
+  const response = await api.get("todos", {
+    params: {
+      filter: filterTodo,
     },
-    body: JSON.stringify(todoRequest)
-  }).then((response) => {
-    if (!response.ok) throw new Error("Failed to create todo")
-    return response.json()
-  })
+  });
+
+  return response.data;
 }
 
-export function updateTodo(id: number, todoRequest: TodoRequest): Promise<Todo> {
-  return fetch(`https://easydev.club/api/v1/todos/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(todoRequest)
-  }).then((response) => {
-    if (!response.ok) throw new Error("Failed to update todo")
-    return response.json()
-  })
+export async function deleteTodo(
+  id: number
+): Promise<void> {
+  await api.delete(`todos/${id}`);
+}
+
+export async function createTodo(
+  todoRequest: TodoRequest
+): Promise<Todo> {
+  const response = await api.post<Todo>(
+    "todos",
+    todoRequest
+  );
+
+  return response.data;
+}
+
+export async function updateTodo(
+  id: number,
+  todoRequest: TodoRequest
+): Promise<Todo> {
+  const response = await api.put<Todo>(
+    `/todos/${id}`,
+    todoRequest
+  );
+
+  return response.data;
 }

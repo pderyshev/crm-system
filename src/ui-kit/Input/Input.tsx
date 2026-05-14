@@ -1,21 +1,9 @@
-export interface InputProps {
-  value: string;
-  onChange: (value: string) => void;
-  error: string;
-  placeholder?: string;
-}
+import React from 'react';
+import { Input, type InputProps } from 'antd';
 
 
-export const TodoInput = ({ value, onChange, error, placeholder }: InputProps) => {
-  return (
-    <div className="todo-form__wrapper">
-      <input
-        className="todo-form__input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-      />
-      {error && <p className="todo-form__error">{error}</p>}
-    </div>
-  );
+const TodoInput: React.FC<InputProps> = (props) => {
+  return <Input {...props} />;
 };
+
+export default TodoInput;

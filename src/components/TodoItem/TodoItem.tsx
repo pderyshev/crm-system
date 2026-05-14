@@ -1,11 +1,11 @@
 import { useState, type FC } from "react";
 import { ToogleCheckbox } from "../ToogleCheckbox/ToogleCheckbox";
-import { validationTodoTitle } from "../../helpers/validationTitle";
-import { CancelIcon, DeleteIcon, EditIcon, SaveIcon } from "../../assets/iсons";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
 import { deleteTodo, updateTodo } from "../../api/Todo";
-import { IconButton } from "../../ui-kit/IconButton/IconButton";
+import { Button, Form } from "antd";
+import { CloseCircleOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import TodoInput from "../../ui-kit/Input/Input";
 
 export interface TodoViewProps {
   todo: Todo;
@@ -16,9 +16,9 @@ export const TodoItem: FC<TodoViewProps> = ({
   todo,
   updateTodoList
 }) => {
+  const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
-  const [draftTitle, setDraftTitle] = useState(todo.title);
-  const [error, setError] = useState("");
+
 
   const handleDeleteTodo = async () => {
     try {
@@ -31,29 +31,27 @@ export const TodoItem: FC<TodoViewProps> = ({
   }
 
   const handleStartEdit = () => {
-    setDraftTitle(todo.title);
-    setError("");
+    form.setFieldsValue({
+      title: todo.title
+    });
     setIsEditing(true);
   };
 
   const handleCancelEdit = () => {
-    setDraftTitle(todo.title);
-    setError("");
+    form.resetFields
     setIsEditing(false);
   }
 
   const handleSaveEdit = async () => {
-    const result = validationTodoTitle(draftTitle);
-
-    if (!result.isValid) {
-      setError(result.error);
-      return;
-    }
-
     try {
-      await updateTodo(todo.id, { title: draftTitle.trim() })
+      const values = await form.validateFields();
+
+      await updateTodo(todo.id, {
+        title: values.title.trim(),
+      });
+
       setIsEditing(false);
-      setError("");
+
       updateTodoList();
     } catch (error) {
       console.error(error);
@@ -72,15 +70,19 @@ export const TodoItem: FC<TodoViewProps> = ({
         <div className="todos__edit-warpper">
           {isEditing ? (
             <div className="todos__edit-container">
-              <input
-                className={`todos__input-draft ${error ? "todos__input-draft--error" : ""}`}
-                value={draftTitle}
-                onChange={(e) => {
-                  setDraftTitle(e.target.value);
-                  if (error) setError("");
-                }}
-              />
-              {error && <span className="todos__error-message">{error}</span>}
+              <Form form={form}>
+                <Form.Item
+                  name="title"
+                  rules={[
+                    { required: true, message: 'Поле не должно быть пустым', },
+                    { min: 2, message: 'Минимальная длина текста 2 символа' },
+                    { max: 64, message: 'Максимальная длина текста 64 символа' }
+                  ]}
+                  style={{ marginBottom: 0 }}
+                >
+                  <TodoInput/>
+                </Form.Item>
+              </Form>
             </div>
           ) : (
             <span
@@ -96,39 +98,37 @@ export const TodoItem: FC<TodoViewProps> = ({
       <div className="todos__inner">
         {isEditing ? (
           <>
-            <IconButton
+            <Button
               onClick={handleSaveEdit}
-              variant="primary"
-              className="todos__btn todos__btn--edit"
-            >
-              <SaveIcon />
-            </IconButton>
+              type="primary"
+              size="large"
+              icon={<SaveOutlined />}
+            />
 
-            <IconButton
+            <Button
               onClick={handleCancelEdit}
-              variant="danger"
-              className="todos__btn todos__btn--delete"
-            >
-              <CancelIcon />
-            </IconButton>
+              type="primary"
+              danger
+              size="large"
+              icon={<CloseCircleOutlined />}
+            />
           </>
         ) : (
           <>
-            <IconButton
+            <Button
               onClick={handleStartEdit}
-              variant="primary"
-              className="todos__btn todos__btn--edit"
-            >
-              <EditIcon />
-            </IconButton>
+              type="primary"
+              size="large"
+              icon={<EditOutlined />}
+            />
 
-            <IconButton
+            <Button
               onClick={handleDeleteTodo}
-              variant="danger"
-              className="todos__btn todos__btn--delete"
-            >
-              <DeleteIcon />
-            </IconButton>
+              type="primary"
+              danger
+              size="large"
+              icon={<DeleteOutlined />}
+            />
           </>
         )}
       </div>

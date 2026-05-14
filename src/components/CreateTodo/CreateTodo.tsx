@@ -1,52 +1,62 @@
-import { useState } from "react"
 import { validationTodoTitle } from "../../helpers/validationTitle"
-import { Button } from "../../ui-kit/Button/Button"
-import "./createTodo.scss"
 import { createTodo } from "../../api/Todo";
-import { TodoInput } from "../../ui-kit/Input/Input";
+import TodoInput from "../../ui-kit/Input/Input";
+import { Button, Form } from "antd";
 
-interface CreateTodoPropos {
+interface CreateTodoProps {
   onTodoCreated: () => void;
 }
 
-export const CreateTodo = ({ onTodoCreated }: CreateTodoPropos) => {
-  const [value, setValue] = useState("")
-  const [error, setError] = useState("")
+export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
+  const [form] = Form.useForm();
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleFinish = async (values: { title: string }) => {
 
-    const trimmedTitle = value.trim()
-
+    const trimmedTitle = values.title.trim()
     const result = validationTodoTitle(trimmedTitle)
 
     if (!result.isValid) {
-      setError(result.error)
+      form.setFields([{name: "title", errors: [result.error]}])
       return
     }
 
     try {
       await createTodo({ title: trimmedTitle, isDone: false })
-      setValue("")
-      setError("")
+      form.resetFields()
       onTodoCreated()
     } catch (error) {
       console.error(error);
-      setError("Не удалось создать задачу, повторите попытку")
+      form.setFields([{name: "title", errors: ["Ошибка при создании задачи"]}])
     }
   }
 
   return (
-    <form className="todo-form" onSubmit={handleSubmit}>
+    <Form
+      form={form}
+      style={{ maxWidth: 600,
+        display: 'flex',
+        gap: '10px',
+       }}
+      onFinish={handleFinish}
+    >
+      <Form.Item
+        name="title"
+        style={{ flex: 1}}
+        rules={[
+          { required: true, message: 'Поле не должно быть пустым', },
+          { min: 2, message: 'Минимальная длина текста 2 символа' },
+          { max: 64, message: 'Максимальная длина текста 64 символа' }
+        ]}
+      >
         <TodoInput
-          value={value}
-          onChange={setValue}
-          error={error}
           placeholder="Введите задачу"
         />
-        {/* В случае ошибки валидации - показываем сообщение */}
-        {error && <p className="todo-form__error">{error}</p>}
-      <Button variant="primary" label="Добавить" type="submit" className="todo-form__btn" />
-    </form>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Добавить
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }

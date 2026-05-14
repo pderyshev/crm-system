@@ -1,5 +1,5 @@
 import { CreateTodo } from "../../components/CreateTodo/CreateTodo";
-import { TodoFilter } from "../../components/TodoFilter/TodoFilter";
+import TodoFilter from "../../components/TodoFilter/TodoFilter";
 import { TodoListView } from "../../components/TodoList/TodoList";
 import {
   getTodos,
@@ -29,6 +29,14 @@ export default function TodoPage() {
 
   useEffect(() => {
     loadTodoList(filterTodo);
+
+    const intervalId = setInterval(() => {
+      loadTodoList(filterTodo);
+    }, 5000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [filterTodo]);
 
   return (
@@ -40,7 +48,6 @@ export default function TodoPage() {
         setFilter={setFilterTodo}
         counts={todoData?.info || { all: 0, completed: 0, inWork: 0 }}
       />
-
       <TodoListView
         todoList={todoData?.data || []}
         updateTodoList={loadTodoList}

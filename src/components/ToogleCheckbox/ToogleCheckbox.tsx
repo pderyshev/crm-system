@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import "./toogleCheckbox.scss";
+import { Checkbox } from 'antd';
 import { updateTodo } from "../../api/Todo";
 
 export interface CheckboxProps {
@@ -20,9 +20,7 @@ export const ToogleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }
   }
   
   return (
-    <input
-      className="custom-checkbox"
-      type="checkbox"
+    <Checkbox
       checked={isDone}
       onChange={handleToogle}
     />
