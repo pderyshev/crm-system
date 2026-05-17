@@ -1,0 +1,13 @@
+.todos__list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  gap: 15px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.todos__item {
+  width: 100%;
+}/*# sourceMappingURL=todoList.css.map */

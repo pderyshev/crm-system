@@ -70,7 +70,10 @@ export const TodoItem: FC<TodoViewProps> = ({
         <div className="todos__edit-warpper">
           {isEditing ? (
             <div className="todos__edit-container">
-              <Form form={form}>
+              <Form
+                form={form}
+                onFinish={handleSaveEdit}
+              >
                 <Form.Item
                   name="title"
                   rules={[
@@ -80,7 +83,7 @@ export const TodoItem: FC<TodoViewProps> = ({
                   ]}
                   style={{ marginBottom: 0 }}
                 >
-                  <TodoInput/>
+                  <TodoInput />
                 </Form.Item>
               </Form>
             </div>
@@ -99,10 +102,11 @@ export const TodoItem: FC<TodoViewProps> = ({
         {isEditing ? (
           <>
             <Button
-              onClick={handleSaveEdit}
+              htmlType="submit"
               type="primary"
               size="large"
               icon={<SaveOutlined />}
+              onClick={() => form.submit()}
             />
 
             <Button
