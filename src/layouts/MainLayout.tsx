@@ -1,7 +1,11 @@
 import React from 'react'
 import { Layout, Menu } from 'antd'
 import type { MenuProps } from 'antd'
-import { Outlet, useLocation, useNavigate } from 'react-router'
+import {
+  Outlet,
+  useLocation,
+  useNavigate
+} from 'react-router'
 
 const { Content, Sider } = Layout
 
@@ -39,7 +43,7 @@ const MainLayout = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={items}
-          onClick={({ key }) => navigate(key)} 
+          onClick={({ key }) => navigate(key)}
         />
       </Sider>
 

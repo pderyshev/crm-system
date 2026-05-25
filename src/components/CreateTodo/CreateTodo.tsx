@@ -1,7 +1,15 @@
-import { MAX_TODO_LENGTH, MIN_TODO_LENGTH, validationTodoTitle } from "../../helpers/validationTitle"
+import {
+  MAX_TODO_LENGTH,
+  MIN_TODO_LENGTH,
+  validationTodoTitle
+} from "../../helpers/validationTitle"
 import { createTodo } from "../../api/todo";
-import TodoInput from "../../ui-kit/Input/Input";
-import { Button, Form, notification } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  notification
+} from "antd";
 
 interface CreateTodoProps {
   onTodoCreated: () => void;
@@ -23,7 +31,7 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
     const result = validationTodoTitle(trimmedTitle)
 
     if (!result.isValid) {
-      form.setFields([{name: "title", errors: [result.error]}])
+      form.setFields([{ name: "title", errors: [result.error] }])
       return
     }
 
@@ -43,33 +51,34 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
     <>
       {contextHolder}
       <Form
-      form={form}
-      style={{ maxWidth: 600,
-        display: 'flex',
-        gap: '10px',
-       }}
-      onFinish={handleFinish}
-    >
-      <Form.Item
-        name="title"
-        style={{ flex: 1}}
-        rules={[
-          { required: true, message: 'Поле не должно быть пустым', },
-          { min: minTitleLength, message: `Минимальная длина текста ${minTitleLength} символа` },
-          { max: maxTitleLength, message: `Максимальная длина текста ${maxTitleLength} символов` }
-        ]}
+        form={form}
+        style={{
+          maxWidth: 600,
+          display: 'flex',
+          gap: '10px',
+        }}
+        onFinish={handleFinish}
       >
-        <TodoInput
-          placeholder="Введите задачу"
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Добавить
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name="title"
+          style={{ flex: 1 }}
+          rules={[
+            { required: true, message: 'Поле не должно быть пустым', },
+            { min: minTitleLength, message: `Минимальная длина текста ${minTitleLength} символа` },
+            { max: maxTitleLength, message: `Максимальная длина текста ${maxTitleLength} символов` }
+          ]}
+        >
+          <Input
+            placeholder="Введите задачу"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
     </>
-    
+
   )
 }

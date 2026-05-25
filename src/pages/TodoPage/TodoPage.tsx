@@ -1,13 +1,19 @@
 import { CreateTodo } from "../../components/CreateTodo/CreateTodo";
 import TodoFilter from "../../components/TodoFilter/TodoFilter";
 import { TodoListView } from "../../components/TodoList/TodoList";
-import {
-  getTodos,
-} from "../../api/todo";
+import { getTodos } from "../../api/todo";
 import "./todoPage.scss";
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect
+} from "react";
 import type { RequestState } from "../../types/requestState";
-import type { FilterTodo, MetaResponse, Todo, TodoInfo } from "../../types/todo";
+import type {
+  FilterTodo,
+  MetaResponse,
+  Todo,
+  TodoInfo
+} from "../../types/todo";
 
 export default function TodoPage() {
   const [, setPageState] = useState<RequestState>({ status: "idle" });

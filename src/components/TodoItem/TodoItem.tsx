@@ -2,11 +2,26 @@ import { useState, type FC } from "react";
 import { ToggleCheckbox } from "../ToggleCheckbox/ToggleCheckbox";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
-import { deleteTodo, updateTodo } from "../../api/todo";
-import { Button, Form, notification } from "antd";
-import { CloseCircleOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
-import TodoInput from "../../ui-kit/Input/Input";
-import { MIN_TODO_LENGTH, MAX_TODO_LENGTH } from "../../helpers/validationTitle";
+import {
+  deleteTodo,
+  updateTodo
+} from "../../api/todo";
+import {
+  Button,
+  Form,
+  Input,
+  notification
+} from "antd";
+import {
+  CloseCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  SaveOutlined
+} from "@ant-design/icons";
+import {
+  MIN_TODO_LENGTH,
+  MAX_TODO_LENGTH
+} from "../../helpers/validationTitle";
 
 export interface TodoViewProps {
   todo: Todo;
@@ -97,7 +112,7 @@ export const TodoItem: FC<TodoViewProps> = ({
                     ]}
                     style={{ marginBottom: 0 }}
                   >
-                    <TodoInput />
+                    <Input />
                   </Form.Item>
                 </Form>
               </div>
