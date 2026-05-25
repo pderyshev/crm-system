@@ -30,7 +30,6 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
         title: "Ошибка при создании задачи",
         description: `Не удалось создать задачу "${trimmedTitle}". Пожалуйста, попробуйте снова.`
       });
-      form.setFields([{name: "title", errors: ["Ошибка при создании задачи"]}])
     }
   }
 
