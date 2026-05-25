@@ -6,6 +6,7 @@ import { deleteTodo, updateTodo } from "../../api/todo";
 import { Button, Form } from "antd";
 import { CloseCircleOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import TodoInput from "../../ui-kit/Input/Input";
+import { MIN_TODO_LENGTH, MAX_TODO_LENGTH } from "../../helpers/validationTitle";
 
 export interface TodoViewProps {
   todo: Todo;
@@ -18,6 +19,8 @@ export const TodoItem: FC<TodoViewProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [isEditing, setIsEditing] = useState(false);
+  const minTitleLength = MIN_TODO_LENGTH
+  const maxTitleLength = MAX_TODO_LENGTH
 
 
   const handleDeleteTodo = async () => {
@@ -38,7 +41,7 @@ export const TodoItem: FC<TodoViewProps> = ({
   };
 
   const handleCancelEdit = () => {
-    form.resetFields
+    form.resetFields()
     setIsEditing(false);
   }
 
@@ -78,8 +81,8 @@ export const TodoItem: FC<TodoViewProps> = ({
                   name="title"
                   rules={[
                     { required: true, message: 'Поле не должно быть пустым', },
-                    { min: 2, message: 'Минимальная длина текста 2 символа' },
-                    { max: 64, message: 'Максимальная длина текста 64 символа' }
+                    { min: minTitleLength, message: `Минимальная длина текста ${minTitleLength} символа` },
+                    { max: maxTitleLength, message: `Максимальная длина текста ${maxTitleLength} символов` }
                   ]}
                   style={{ marginBottom: 0 }}
                 >
