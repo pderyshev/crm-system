@@ -1,7 +1,7 @@
 import { validationTodoTitle } from "../../helpers/validationTitle"
 import { createTodo } from "../../api/todo";
 import TodoInput from "../../ui-kit/Input/Input";
-import { Button, Form } from "antd";
+import { Button, Form, notification } from "antd";
 
 interface CreateTodoProps {
   onTodoCreated: () => void;
@@ -9,6 +9,7 @@ interface CreateTodoProps {
 
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
   const [form] = Form.useForm();
+  const [api, contextHolder] = notification.useNotification();
 
   const handleFinish = async (values: { title: string }) => {
 
@@ -24,14 +25,19 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
       await createTodo({ title: trimmedTitle, isDone: false })
       form.resetFields()
       onTodoCreated()
-    } catch (error) {
-      console.error(error);
+    } catch {
+      api.error({
+        title: "Ошибка при создании задачи",
+        description: `Не удалось создать задачу "${trimmedTitle}". Пожалуйста, попробуйте снова.`
+      });
       form.setFields([{name: "title", errors: ["Ошибка при создании задачи"]}])
     }
   }
 
   return (
-    <Form
+    <>
+      {contextHolder}
+      <Form
       form={form}
       style={{ maxWidth: 600,
         display: 'flex',
@@ -58,5 +64,7 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
         </Button>
       </Form.Item>
     </Form>
+    </>
+    
   )
 }
