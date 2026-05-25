@@ -1,5 +1,5 @@
 import { validationTodoTitle } from "../../helpers/validationTitle"
-import { createTodo } from "../../api/Todo";
+import { createTodo } from "../../api/todo";
 import TodoInput from "../../ui-kit/Input/Input";
 import { Button, Form } from "antd";
 

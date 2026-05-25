@@ -39,7 +39,7 @@ const MainLayout = () => {
           mode="inline"
           selectedKeys={[location.pathname]}
           items={items}
-          onClick={({ key }) => navigate(key)}
+          onClick={({ key }) => navigate(key)} 
         />
       </Sider>
 

@@ -3,7 +3,7 @@ import TodoFilter from "../../components/TodoFilter/TodoFilter";
 import { TodoListView } from "../../components/TodoList/TodoList";
 import {
   getTodos,
-} from "../../api/Todo";
+} from "../../api/todo";
 import "./todoPage.scss";
 import { useState, useEffect } from "react";
 import type { RequestState } from "../../types/requestState";

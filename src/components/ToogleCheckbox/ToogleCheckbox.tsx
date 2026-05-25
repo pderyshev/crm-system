@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import { Checkbox } from 'antd';
-import { updateTodo } from "../../api/Todo";
+import { updateTodo } from "../../api/todo";
 
 export interface CheckboxProps {
   id: number;

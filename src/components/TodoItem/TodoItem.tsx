@@ -2,7 +2,7 @@ import { useState, type FC } from "react";
 import { ToogleCheckbox } from "../ToogleCheckbox/ToogleCheckbox";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
-import { deleteTodo, updateTodo } from "../../api/Todo";
+import { deleteTodo, updateTodo } from "../../api/todo";
 import { Button, Form } from "antd";
 import { CloseCircleOutlined, DeleteOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import TodoInput from "../../ui-kit/Input/Input";
