@@ -7,13 +7,17 @@ interface CreateTodoProps {
   onTodoCreated: () => void;
 }
 
+interface CreateTodoFormValues {
+  title: string;
+}
+
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<CreateTodoFormValues>();
   const [api, contextHolder] = notification.useNotification();
   const minTitleLength = MIN_TODO_LENGTH
   const maxTitleLength = MAX_TODO_LENGTH
 
-  const handleFinish = async (values: { title: string }) => {
+  const handleFinish = async (values: CreateTodoFormValues) => {
 
     const trimmedTitle = values.title.trim()
     const result = validationTodoTitle(trimmedTitle)

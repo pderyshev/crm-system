@@ -13,11 +13,15 @@ export interface TodoViewProps {
   updateTodoList: () => void;
 }
 
+interface CreateTodoFormValues {
+  title: string;
+}
+
 export const TodoItem: FC<TodoViewProps> = ({
   todo,
   updateTodoList
 }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<CreateTodoFormValues>();
   const [isEditing, setIsEditing] = useState(false);
   const minTitleLength = MIN_TODO_LENGTH
   const maxTitleLength = MAX_TODO_LENGTH
