@@ -8,10 +8,10 @@ export interface CheckboxProps {
   updateTodoList: () => void;
 }
 
-export const ToogleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }) => {
+export const ToggleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }) => {
   const [api, contextHolder] = notification.useNotification();
   
-  const handleToogle = async () => {
+  const handleToggle = async () => {
     try {
       await updateTodo(id, { isDone: !isDone })
       updateTodoList();
@@ -28,7 +28,7 @@ export const ToogleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }
     {contextHolder}
     <Checkbox
       checked={isDone}
-      onChange={handleToogle}
+      onChange={handleToggle}
     />
     </>
     

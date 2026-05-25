@@ -1,5 +1,5 @@
 import { useState, type FC } from "react";
-import { ToogleCheckbox } from "../ToogleCheckbox/ToogleCheckbox";
+import { ToggleCheckbox } from "../ToggleCheckbox/ToggleCheckbox";
 import "./TodoItem.scss"
 import type { Todo } from "../../types/todo";
 import { deleteTodo, updateTodo } from "../../api/todo";
@@ -76,7 +76,7 @@ export const TodoItem: FC<TodoViewProps> = ({
       {contextHolder}
       <div className="todos__item-wrapper">
         <div className="todos__item-left">
-          <ToogleCheckbox
+          <ToggleCheckbox
             id={todo.id}
             isDone={todo.isDone}
             updateTodoList={updateTodoList}
