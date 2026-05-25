@@ -3,7 +3,9 @@ import axios from "axios";
 import type {
   Todo,
   TodoRequest,
-  FilterTodo
+  FilterTodo,
+  MetaResponse,
+  TodoInfo
 } from "../types/todo";
 
 const api = axios.create({
@@ -13,7 +15,7 @@ const api = axios.create({
   }
 })
 
-export async function getTodos(filterTodo: FilterTodo) {
+export async function getTodos(filterTodo: FilterTodo):Promise<MetaResponse<Todo, TodoInfo>> {
   const response = await api.get("todos", {
     params: {
       filter: filterTodo,
