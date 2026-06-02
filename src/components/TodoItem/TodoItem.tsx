@@ -83,6 +83,51 @@ export const TodoItem: FC<TodoViewProps> = ({
   return (
     <>
       {contextHolder}
+      {isEditing ? (
+      <Form
+        form={form}
+        onFinish={handleSaveEdit}
+        className="todos__item-wrapper"
+      >
+        <div className="todos__item-left">
+          <ToggleCheckbox
+            id={todo.id}
+            isDone={todo.isDone}
+            updateTodoList={updateTodoList}
+          />
+
+          <div className="todos__edit-warpper">
+            <div className="todos__edit-container">
+              <Form.Item
+                name="title"
+                rules={titleRules}
+                style={{ marginBottom: 0 }}
+              >
+                <Input />
+              </Form.Item>
+            </div>
+          </div>
+        </div>
+
+        <div className="todos__inner">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="large"
+            icon={<SaveOutlined />}
+          />
+
+          <Button
+            htmlType="button"
+            onClick={handleCancelEdit}
+            type="primary"
+            danger
+            size="large"
+            icon={<CloseCircleOutlined />}
+          />
+        </div>
+      </Form>
+    ) : (
       <div className="todos__item-wrapper">
         <div className="todos__item-left">
           <ToggleCheckbox
@@ -90,72 +135,39 @@ export const TodoItem: FC<TodoViewProps> = ({
             isDone={todo.isDone}
             updateTodoList={updateTodoList}
           />
+
           <div className="todos__edit-warpper">
-            {isEditing ? (
-              <div className="todos__edit-container">
-                <Form
-                  form={form}
-                  onFinish={handleSaveEdit}
-                >
-                  <Form.Item
-                    name="title"
-                    rules={titleRules}
-                    style={{ marginBottom: 0 }}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Form>
-              </div>
-            ) : (
-              <span
-                className="todos__title"
-                style={{ textDecoration: todo.isDone ? "line-through" : "none" }}
-              >
-                {todo.title}
-              </span>
-            )}
+            <span
+              className="todos__title"
+              style={{
+                textDecoration: todo.isDone ? "line-through" : "none",
+              }}
+            >
+              {todo.title}
+            </span>
           </div>
         </div>
 
         <div className="todos__inner">
-          {isEditing ? (
-            <>
-              <Button
-                htmlType="submit"
-                type="primary"
-                size="large"
-                icon={<SaveOutlined />}
-                onClick={() => form.submit()}
-              />
+          <Button
+            htmlType="button"
+            onClick={handleStartEdit}
+            type="primary"
+            size="large"
+            icon={<EditOutlined />}
+          />
 
-              <Button
-                onClick={handleCancelEdit}
-                type="primary"
-                danger
-                size="large"
-                icon={<CloseCircleOutlined />}
-              />
-            </>
-          ) : (
-            <>
-              <Button
-                onClick={handleStartEdit}
-                type="primary"
-                size="large"
-                icon={<EditOutlined />}
-              />
-
-              <Button
-                onClick={handleDeleteTodo}
-                type="primary"
-                danger
-                size="large"
-                icon={<DeleteOutlined />}
-              />
-            </>
-          )}
+          <Button
+            htmlType="button"
+            onClick={handleDeleteTodo}
+            type="primary"
+            danger
+            size="large"
+            icon={<DeleteOutlined />}
+          />
         </div>
       </div>
+    )}
     </>
   );
 }
