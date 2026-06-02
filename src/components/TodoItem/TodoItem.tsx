@@ -18,10 +18,7 @@ import {
   EditOutlined,
   SaveOutlined
 } from "@ant-design/icons";
-import {
-  MIN_TODO_LENGTH,
-  MAX_TODO_LENGTH
-} from "../../helpers/validationTitle";
+import { titleRules } from "../../helpers/validationTitle";
 
 export interface TodoViewProps {
   todo: Todo;
@@ -39,9 +36,6 @@ export const TodoItem: FC<TodoViewProps> = ({
   const [form] = Form.useForm<CreateTodoFormValues>();
   const [isEditing, setIsEditing] = useState(false);
   const [api, contextHolder] = notification.useNotification();
-  const minTitleLength = MIN_TODO_LENGTH
-  const maxTitleLength = MAX_TODO_LENGTH
-
 
   const handleDeleteTodo = async () => {
     try {
@@ -105,11 +99,7 @@ export const TodoItem: FC<TodoViewProps> = ({
                 >
                   <Form.Item
                     name="title"
-                    rules={[
-                      { required: true, message: 'Поле не должно быть пустым', },
-                      { min: minTitleLength, message: `Минимальная длина текста ${minTitleLength} символа` },
-                      { max: maxTitleLength, message: `Максимальная длина текста ${maxTitleLength} символов` }
-                    ]}
+                    rules={titleRules}
                     style={{ marginBottom: 0 }}
                   >
                     <Input />

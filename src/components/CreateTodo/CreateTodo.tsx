@@ -1,7 +1,4 @@
-import {
-  MAX_TODO_LENGTH,
-  MIN_TODO_LENGTH,
-} from "../../helpers/validationTitle"
+import { titleRules } from "../../helpers/validationTitle"
 import { createTodo } from "../../api/todo";
 import {
   Button,
@@ -21,8 +18,6 @@ interface CreateTodoFormValues {
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
   const [form] = Form.useForm<CreateTodoFormValues>();
   const [api, contextHolder] = notification.useNotification();
-  const minTitleLength = MIN_TODO_LENGTH
-  const maxTitleLength = MAX_TODO_LENGTH
 
   const handleFinish = async (values: CreateTodoFormValues) => {
     const { title } = values
@@ -54,11 +49,7 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
         <Form.Item
           name="title"
           style={{ flex: 1 }}
-          rules={[
-            { required: true, message: 'Поле не должно быть пустым', },
-            { min: minTitleLength, message: `Минимальная длина текста ${minTitleLength} символа` },
-            { max: maxTitleLength, message: `Максимальная длина текста ${maxTitleLength} символов` }
-          ]}
+          rules={titleRules}
         >
           <Input
             placeholder="Введите задачу"
