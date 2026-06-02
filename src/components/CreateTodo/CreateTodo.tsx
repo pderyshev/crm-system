@@ -1,7 +1,6 @@
 import {
   MAX_TODO_LENGTH,
   MIN_TODO_LENGTH,
-  validationTodoTitle
 } from "../../helpers/validationTitle"
 import { createTodo } from "../../api/todo";
 import {
@@ -26,23 +25,16 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
   const maxTitleLength = MAX_TODO_LENGTH
 
   const handleFinish = async (values: CreateTodoFormValues) => {
-
-    const trimmedTitle = values.title.trim()
-    const result = validationTodoTitle(trimmedTitle)
-
-    if (!result.isValid) {
-      form.setFields([{ name: "title", errors: [result.error] }])
-      return
-    }
+    const { title } = values
 
     try {
-      await createTodo({ title: trimmedTitle, isDone: false })
+      await createTodo({ title: title, isDone: false })
       form.resetFields()
       onTodoCreated()
     } catch {
       api.error({
         title: "Ошибка при создании задачи",
-        description: `Не удалось создать задачу "${trimmedTitle}". Пожалуйста, попробуйте снова.`
+        description: `Не удалось создать задачу "${title}". Пожалуйста, попробуйте снова.`
       });
     }
   }
