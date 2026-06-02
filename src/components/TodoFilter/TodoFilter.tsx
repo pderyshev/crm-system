@@ -7,6 +7,12 @@ export interface FilterProps {
   counts: { all: number, completed: number, inWork: number };
 };
 
+const FILTERS = ["all", "completed", "inWork"] as const;
+
+function isFilterTodo(value: string): value is FilterTodo {
+  return FILTERS.includes(value as FilterTodo);
+}
+
 const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
   const items = [
     {
@@ -24,10 +30,14 @@ const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
   ];
 
   return (
-    <Tabs 
-    activeKey={filter}
-    onChange={(key) => setFilter(key as FilterTodo)}
-    items={items}
+    <Tabs
+      activeKey={filter}
+      onChange={(key) => {
+        if (isFilterTodo(key)) {
+          setFilter(key)
+        }
+      }}
+      items={items}
     />
   )
 }
