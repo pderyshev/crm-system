@@ -1,7 +1,7 @@
 import { CreateTodo } from "../../components/CreateTodo/CreateTodo";
 import TodoFilter from "../../components/TodoFilter/TodoFilter";
 import { TodoListView } from "../../components/TodoList/TodoList";
-import { getTodos } from "../../api/todo";
+import { getTodos } from "../../api/todo.api";
 import "./todoPage.scss";
 import {
   useState,

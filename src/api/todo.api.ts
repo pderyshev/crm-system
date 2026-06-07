@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axiosInstance } from "./axios";
 
 import type {
   Todo,
@@ -8,15 +8,8 @@ import type {
   TodoInfo
 } from "../types/todo";
 
-const api = axios.create({
-  baseURL: "https://easydev.club/api/v1/",
-  headers: {
-    "Content-Type": "application/json"
-  }
-})
-
 export async function getTodos(filterTodo: FilterTodo):Promise<MetaResponse<Todo, TodoInfo>> {
-  const response = await api.get("todos", {
+  const response = await axiosInstance.get("todos", {
     params: {
       filter: filterTodo,
     },
@@ -28,13 +21,13 @@ export async function getTodos(filterTodo: FilterTodo):Promise<MetaResponse<Todo
 export async function deleteTodo(
   id: number
 ): Promise<void> {
-  await api.delete(`todos/${id}`);
+  await axiosInstance.delete(`todos/${id}`);
 }
 
 export async function createTodo(
   todoRequest: TodoRequest
 ): Promise<Todo> {
-  const response = await api.post<Todo>(
+  const response = await axiosInstance.post<Todo>(
     "todos",
     todoRequest
   );
@@ -46,7 +39,7 @@ export async function updateTodo(
   id: number,
   todoRequest: TodoRequest
 ): Promise<Todo> {
-  const response = await api.put<Todo>(
+  const response = await axiosInstance.put<Todo>(
     `/todos/${id}`,
     todoRequest
   );

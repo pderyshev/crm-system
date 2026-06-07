@@ -5,7 +5,7 @@ import type { Todo } from "../../types/todo";
 import {
   deleteTodo,
   updateTodo
-} from "../../api/todo";
+} from "../../api/todo.api";
 import {
   Button,
   Form,
@@ -18,7 +18,7 @@ import {
   EditOutlined,
   SaveOutlined
 } from "@ant-design/icons";
-import { titleRules } from "../../helpers/validationTitle";
+import { titleRules } from "../../helpers/rules";
 
 export interface TodoViewProps {
   todo: Todo;

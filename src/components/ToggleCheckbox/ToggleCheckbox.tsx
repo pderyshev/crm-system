@@ -3,7 +3,7 @@ import {
   Checkbox,
   notification
 } from 'antd';
-import { updateTodo } from "../../api/todo";
+import { updateTodo } from "../../api/todo.api";
 
 export interface CheckboxProps {
   id: number;

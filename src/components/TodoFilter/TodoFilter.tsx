@@ -29,14 +29,16 @@ const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
     },
   ];
 
+  const handleTabChange = (key: string) => {
+    if (isFilterTodo(key)) {
+      setFilter(key);
+    }
+  };
+
   return (
     <Tabs
       activeKey={filter}
-      onChange={(key) => {
-        if (isFilterTodo(key)) {
-          setFilter(key)
-        }
-      }}
+      onChange={handleTabChange}
       items={items}
     />
   )

@@ -1,5 +1,5 @@
-import { titleRules } from "../../helpers/validationTitle"
-import { createTodo } from "../../api/todo";
+import { titleRules } from "../../helpers/rules"
+import { createTodo } from "../../api/todo.api";
 import {
   Button,
   Form,
