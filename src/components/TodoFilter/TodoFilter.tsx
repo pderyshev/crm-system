@@ -1,5 +1,5 @@
 import type { FilterTodo } from "../../types/todo";
-import "./todoFilter.scss";
+import { Tabs } from 'antd';
 
 export interface FilterProps {
   filter: FilterTodo;
@@ -7,18 +7,41 @@ export interface FilterProps {
   counts: { all: number, completed: number, inWork: number };
 };
 
-export const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
+const FILTERS = ["all", "completed", "inWork"] as const;
+
+function isFilterTodo(value: string): value is FilterTodo {
+  return FILTERS.includes(value as FilterTodo);
+}
+
+const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
+  const items = [
+    {
+      key: "all",
+      label: `Все (${counts.all})`,
+    },
+    {
+      key: "completed",
+      label: `Выполненные (${counts.completed})`
+    },
+    {
+      key: "inWork",
+      label: `В работе (${counts.inWork})`
+    },
+  ];
+
+  const handleTabChange = (key: string) => {
+    if (isFilterTodo(key)) {
+      setFilter(key);
+    }
+  };
+
   return (
-    <div className="todo-filter">
-      <button className="todo-filter__btn" disabled={filter === "all"} onClick={() => setFilter("all")}>
-        Все ({counts.all})
-      </button>
-      <button className="todo-filter__btn" disabled={filter === "completed"} onClick={() => setFilter("completed")}>
-        Выполненные ({counts.completed})
-      </button>
-      <button className="todo-filter__btn" disabled={filter === "inWork"} onClick={() => setFilter("inWork")}>
-        В работе ({counts.inWork})
-      </button>
-    </div>
+    <Tabs
+      activeKey={filter}
+      onChange={handleTabChange}
+      items={items}
+    />
   )
 }
+
+export default TodoFilter;

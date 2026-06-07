@@ -1,52 +1,67 @@
-import { useState } from "react"
-import { validationTodoTitle } from "../../helpers/validationTitle"
-import { Button } from "../../ui-kit/Button/Button"
-import "./createTodo.scss"
-import { createTodo } from "../../api/Todo";
-import { TodoInput } from "../../ui-kit/Input/Input";
+import { titleRules } from "../../helpers/rules"
+import { createTodo } from "../../api/todo.api";
+import {
+  Button,
+  Form,
+  Input,
+  notification
+} from "antd";
 
-interface CreateTodoPropos {
+interface CreateTodoProps {
   onTodoCreated: () => void;
 }
 
-export const CreateTodo = ({ onTodoCreated }: CreateTodoPropos) => {
-  const [value, setValue] = useState("")
-  const [error, setError] = useState("")
+interface CreateTodoFormValues {
+  title: string;
+}
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
+export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
+  const [form] = Form.useForm<CreateTodoFormValues>();
+  const [api, contextHolder] = notification.useNotification();
 
-    const trimmedTitle = value.trim()
-
-    const result = validationTodoTitle(trimmedTitle)
-
-    if (!result.isValid) {
-      setError(result.error)
-      return
-    }
+  const handleFinish = async (values: CreateTodoFormValues) => {
+    const { title } = values
 
     try {
-      await createTodo({ title: trimmedTitle, isDone: false })
-      setValue("")
-      setError("")
+      await createTodo({ title: title, isDone: false })
+      form.resetFields()
       onTodoCreated()
-    } catch (error) {
-      console.error(error);
-      setError("Не удалось создать задачу, повторите попытку")
+    } catch {
+      api.error({
+        title: "Ошибка при создании задачи",
+        description: `Не удалось создать задачу "${title}". Пожалуйста, попробуйте снова.`
+      });
     }
   }
 
   return (
-    <form className="todo-form" onSubmit={handleSubmit}>
-        <TodoInput
-          value={value}
-          onChange={setValue}
-          error={error}
-          placeholder="Введите задачу"
-        />
-        {/* В случае ошибки валидации - показываем сообщение */}
-        {error && <p className="todo-form__error">{error}</p>}
-      <Button variant="primary" label="Добавить" type="submit" className="todo-form__btn" />
-    </form>
+    <>
+      {contextHolder}
+      <Form
+        form={form}
+        style={{
+          maxWidth: 600,
+          display: 'flex',
+          gap: '10px',
+        }}
+        onFinish={handleFinish}
+      >
+        <Form.Item
+          name="title"
+          style={{ flex: 1 }}
+          rules={titleRules}
+        >
+          <Input
+            placeholder="Введите задачу"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
+
   )
 }
