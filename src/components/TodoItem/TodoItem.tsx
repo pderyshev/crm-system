@@ -10,7 +10,8 @@ import {
   Button,
   Form,
   Input,
-  notification
+  notification,
+  Typography
 } from "antd";
 import {
   CloseCircleOutlined,
@@ -36,6 +37,7 @@ export const TodoItem: FC<TodoViewProps> = ({
   const [form] = Form.useForm<CreateTodoFormValues>();
   const [isEditing, setIsEditing] = useState(false);
   const [api, contextHolder] = notification.useNotification();
+  const { Text } = Typography;
 
   const handleDeleteTodo = async () => {
     try {
@@ -84,90 +86,88 @@ export const TodoItem: FC<TodoViewProps> = ({
     <>
       {contextHolder}
       {isEditing ? (
-      <Form
-        form={form}
-        onFinish={handleSaveEdit}
-        className="todos__item-wrapper"
-      >
-        <div className="todos__item-left">
-          <ToggleCheckbox
-            id={todo.id}
-            isDone={todo.isDone}
-            updateTodoList={updateTodoList}
-          />
+        <Form
+          form={form}
+          onFinish={handleSaveEdit}
+          className="todos__item-wrapper"
+        >
+          <div className="todos__item-left">
+            <ToggleCheckbox
+              id={todo.id}
+              isDone={todo.isDone}
+              updateTodoList={updateTodoList}
+            />
 
-          <div className="todos__edit-warpper">
-            <div className="todos__edit-container">
-              <Form.Item
-                name="title"
-                rules={titleRules}
-                style={{ marginBottom: 0 }}
-              >
-                <Input />
-              </Form.Item>
+            <div className="todos__edit-warpper">
+              <div className="todos__edit-container">
+                <Form.Item
+                  name="title"
+                  rules={titleRules}
+                  style={{ marginBottom: 0 }}
+                >
+                  <Input />
+                </Form.Item>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="todos__inner">
-          <Button
-            htmlType="submit"
-            type="primary"
-            size="large"
-            icon={<SaveOutlined />}
-          />
+          <div className="todos__inner">
+            <Button
+              htmlType="submit"
+              type="primary"
+              size="large"
+              icon={<SaveOutlined />}
+            />
 
-          <Button
-            htmlType="button"
-            onClick={handleCancelEdit}
-            type="primary"
-            danger
-            size="large"
-            icon={<CloseCircleOutlined />}
-          />
-        </div>
-      </Form>
-    ) : (
-      <div className="todos__item-wrapper">
-        <div className="todos__item-left">
-          <ToggleCheckbox
-            id={todo.id}
-            isDone={todo.isDone}
-            updateTodoList={updateTodoList}
-          />
+            <Button
+              htmlType="button"
+              onClick={handleCancelEdit}
+              type="primary"
+              danger
+              size="large"
+              icon={<CloseCircleOutlined />}
+            />
+          </div>
+        </Form>
+      ) : (
+        <div className="todos__item-wrapper">
+          <div className="todos__item-left">
+            <ToggleCheckbox
+              id={todo.id}
+              isDone={todo.isDone}
+              updateTodoList={updateTodoList}
+            />
 
-          <div className="todos__edit-warpper">
-            <span
-              className="todos__title"
-              style={{
-                textDecoration: todo.isDone ? "line-through" : "none",
-              }}
-            >
-              {todo.title}
-            </span>
+            <div className="todos__edit-warpper">
+              <Text
+                className="todos__title"
+                delete={todo.isDone}
+              >
+                {todo.title}
+              </Text>
+            </div>
+          </div>
+
+          <div className="todos__inner">
+            <Button
+              htmlType="button"
+              onClick={handleStartEdit}
+              type="primary"
+              size="large"
+              icon={<EditOutlined />}
+            />
+
+            <Button
+              htmlType="button"
+              onClick={handleDeleteTodo}
+              type="primary"
+              danger
+              size="large"
+              icon={<DeleteOutlined />}
+            />
           </div>
         </div>
-
-        <div className="todos__inner">
-          <Button
-            htmlType="button"
-            onClick={handleStartEdit}
-            type="primary"
-            size="large"
-            icon={<EditOutlined />}
-          />
-
-          <Button
-            htmlType="button"
-            onClick={handleDeleteTodo}
-            type="primary"
-            danger
-            size="large"
-            icon={<DeleteOutlined />}
-          />
-        </div>
-      </div>
-    )}
+      )}
     </>
   );
 }
