@@ -1,11 +1,11 @@
-import type { FilterTodo } from "../../types/todo";
-import { Tabs } from 'antd';
+import type { FilterTodo } from "../../types/todo"
+import { Tabs } from "antd"
 
 export interface FilterProps {
   filter: FilterTodo;
   setFilter: (f: FilterTodo) => void;
-  counts: { all: number, completed: number, inWork: number };
-};
+  counts: { all: number, completed: number, inWork: number }
+}
 
 const FILTERS = ["all", "completed", "inWork"] as const;
 
@@ -27,13 +27,13 @@ const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
       key: "inWork",
       label: `В работе (${counts.inWork})`
     },
-  ];
+  ]
 
   const handleTabChange = (key: string) => {
     if (isFilterTodo(key)) {
-      setFilter(key);
+      setFilter(key)
     }
-  };
+  }
 
   return (
     <Tabs
@@ -44,4 +44,4 @@ const TodoFilter = ({ filter, setFilter, counts }: FilterProps) => {
   )
 }
 
-export default TodoFilter;
+export default TodoFilter

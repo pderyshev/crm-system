@@ -1,12 +1,12 @@
-import { type FC } from "react";
-import { TodoItem } from "../TodoItem/TodoItem";
-import type { Todo, } from "../../types/todo";
-import "./todoList.scss";
+import { type FC } from "react"
+import { TodoItem } from "../TodoItem/TodoItem"
+import type { Todo, } from "../../types/todo"
+import "./todoList.scss"
 
 export interface TodoListProps {
-  todoList: Todo[];
-  updateTodoList: () => void;
-};
+  todoList: Todo[]
+  updateTodoList: () => void
+}
 
 export const TodoListView: FC<TodoListProps> = ({ todoList, updateTodoList }) => {
   return (
@@ -20,5 +20,5 @@ export const TodoListView: FC<TodoListProps> = ({ todoList, updateTodoList }) =>
         </li>
       ))}
     </ul>
-  );
-};
+  )
+}

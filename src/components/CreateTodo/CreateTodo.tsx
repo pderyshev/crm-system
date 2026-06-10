@@ -1,23 +1,23 @@
 import { titleRules } from "../../helpers/rules"
-import { createTodo } from "../../api/todo.api";
+import { createTodo } from "../../api/todo.api"
 import {
   Button,
   Form,
   Input,
   notification
-} from "antd";
+} from "antd"
 
 interface CreateTodoProps {
-  onTodoCreated: () => void;
+  onTodoCreated: () => void
 }
 
 interface CreateTodoFormValues {
-  title: string;
+  title: string
 }
 
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
-  const [form] = Form.useForm<CreateTodoFormValues>();
-  const [api, contextHolder] = notification.useNotification();
+  const [form] = Form.useForm<CreateTodoFormValues>()
+  const [api, contextHolder] = notification.useNotification()
 
   const handleFinish = async (values: CreateTodoFormValues) => {
     const { title } = values
@@ -30,7 +30,7 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
       api.error({
         title: "Ошибка при создании задачи",
         description: `Не удалось создать задачу "${title}". Пожалуйста, попробуйте снова.`
-      });
+      })
     }
   }
 
@@ -41,8 +41,8 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
         form={form}
         style={{
           maxWidth: 600,
-          display: 'flex',
-          gap: '10px',
+          display: "flex",
+          gap: "10px",
         }}
         onFinish={handleFinish}
       >

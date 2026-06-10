@@ -1,13 +1,13 @@
 export interface TodoRequest {
-  title?: string;
-  isDone?: boolean;  // изменение статуса задачи происходит через этот флаг
+  title?: string
+  isDone?: boolean  // изменение статуса задачи происходит через этот флаг
 }
 
 export interface Todo {
-  id: number;
-  title: string;
-  created: string; // ISO date string 
-  isDone: boolean;
+  id: number
+  title: string
+  created: string // ISO date string 
+  isDone: boolean
 }
 
 export interface TodoInfo {
@@ -24,9 +24,9 @@ export interface MetaResponse<T, N> {
   }
 }
 
-export type TodoList = Todo[];
+export type TodoList = Todo[]
 
-export type FilterTodo = "all" | "completed" | "inWork";
+export type FilterTodo = "all" | "completed" | "inWork"
 
 
 
