@@ -1,0 +1,37 @@
+.form-layout {
+  display: flex;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 16px 8px;
+  max-height: calc(100vh - 32px);
+
+
+  &__banner {
+    overflow: hidden;
+    border-radius: 16px;
+  }
+
+  &__banner-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  &__container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+}

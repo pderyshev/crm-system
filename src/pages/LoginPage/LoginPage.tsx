@@ -11,6 +11,8 @@ import { Link, useNavigate } from "react-router"
 import { useAppDispatch } from "../../store/hooks"
 import { loginThunk } from "../../store/auth/authThunks"
 import { loginRules, passwordRules } from "../../helpers/rules"
+import { AuthLayout } from "../../layouts/FormLayots/FormLayout"
+import "./loginPage.scss"
 
 const { Title } = Typography
 
@@ -74,7 +76,7 @@ export const LoginPage = () => {
 
       setSuccess(true)
     } catch (error) {
-      const status = error as  number
+      const status = error as number
 
       if (status === 401) {
         setErrorType("unauthorized")
@@ -92,67 +94,52 @@ export const LoginPage = () => {
   return (
     <>
       {contextHolder}
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 16,
-        }}
+      <AuthLayout
+        footer={
+          <div className="login-page__footer">
+            Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
+          </div>
+        }
       >
-        <Card
-          style={{
-            width: 400,
-          }}
-        >
-          <Title
-            level={2}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            Авторизация
-          </Title>
+        <div className="login-page">
+          <Card className="login-page__wrapper">
+            <Title className="login-page__title"
+              level={2}
+            >
+              Авторизация
+            </Title>
 
-          <Form<LoginFormValues>
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-          >
-            <Form.Item
-              label="Логин"
-              name="login"
-              rules={loginRules}
+            <Form<LoginFormValues>
+              form={form}
+              layout="vertical"
+              onFinish={handleSubmit}
             >
-              <Input placeholder="Введите логин" />
-            </Form.Item>
-            <Form.Item
-              label="Пароль"
-              name="password"
-              rules={passwordRules}
-            >
-              <Input.Password placeholder="Введите пароль" />
-            </Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              block
-              loading={loading}
-            >
-              Войти
-            </Button>
-            <div
-              style={{
-                marginTop: 16,
-                textAlign: "center",
-              }}
-            >
-              Нет аккаунта? <Link to="/register">Зарегистрироваться</Link>
-            </div>
-          </Form>
-        </Card>
-      </div>
+              <Form.Item
+                label="Логин"
+                name="login"
+                rules={loginRules}
+              >
+                <Input placeholder="Введите логин" />
+              </Form.Item>
+              <Form.Item
+                label="Пароль"
+                name="password"
+                rules={passwordRules}
+              >
+                <Input.Password placeholder="Введите пароль" />
+              </Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                block
+                loading={loading}
+              >
+                Войти
+              </Button>
+            </Form>
+          </Card>
+        </div>
+      </AuthLayout>
     </>
   )
 }

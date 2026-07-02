@@ -8,6 +8,7 @@ import {
 } from "react-router"
 import { useAppDispatch } from "../store/hooks"
 import { logoutThunk } from "../store/auth/authThunks"
+import "./mainLayout.scss"
 
 const { Content, Sider } = Layout
 
@@ -46,8 +47,9 @@ const MainLayout = () => {
 
   return (
     <Layout hasSider>
-      <Sider style={siderStyle}>
+      <Sider style={siderStyle} className="sider-menu">
         <Menu
+        className="sider-menu"
           theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}

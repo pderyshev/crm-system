@@ -11,6 +11,8 @@ import { Link, useNavigate } from "react-router"
 import { useAppDispatch } from "../../store/hooks"
 import { registerThunk } from "../../store/auth/authThunks"
 import { loginRules, passwordRules, usernameRules } from "../../helpers/rules"
+import { AuthLayout } from "../../layouts/FormLayots/FormLayout"
+import "./registerPage.scss"
 
 const { Title } = Typography
 
@@ -62,7 +64,7 @@ export const RegisterPage = () => {
 
     } catch (error) {
       const status = error as number
-       
+
       if (status === 409) {
         api.error({
           title: "Пользователь уже существует",
@@ -85,7 +87,7 @@ export const RegisterPage = () => {
         title: "Ошибка сервера",
         description: "Попробуйте повторить запрос позже.",
       })
-    } 
+    }
     finally {
       setLoading(false)
     }
@@ -94,157 +96,143 @@ export const RegisterPage = () => {
   return (
     <>
       {contextHolder}
-      <div
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: 16,
-        }}
+      <AuthLayout
+        footer={
+          <div className="register-page__footer">
+            Уже есть аккаунт?{" "}
+            <Link to="/login">
+              Войти
+            </Link>
+          </div>
+        }
       >
-        <Card
-          style={{
-            width: 500,
-          }}
-        >
-          <Title
-            level={2}
-            style={{
-              textAlign: "center",
-            }}
-          >
-            Регистрация
-          </Title>
-          <Form<RegisterFormValues>
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-          >
-            <Form.Item
-              label="Имя пользователя"
-              name="username"
-              rules={usernameRules}
+        <div className="register-page">
+          <Card className="register-page__wrapper">
+            <Title className="register-page__title"
+              level={2}
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Логин"
-              name="login"
-              rules={loginRules}
+              Регистрация
+            </Title>
+            <Form<RegisterFormValues>
+              form={form}
+              layout="vertical"
+              onFinish={handleSubmit}
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  message: "Введите email",
-                },
-                {
-                  type: "email",
-                  message:
-                    "Введите корректный email",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label="Телефон"
-              name="phoneNumber"
-              rules={[
-                {
-                  validator(_, value) {
-                    if (!value) {
-                      return Promise.resolve()
-                    }
-
-                    const phoneRegex =
-                      /^(\+7\d{10}|\d{10,15})$/
-
-                    if (
-                      phoneRegex.test(value)
-                    ) {
-                      return Promise.resolve()
-                    }
-
-                    return Promise.reject(
-                      new Error(
-                        "Некорректный номер телефона"
-                      )
-                    )
+              <Form.Item
+                label="Имя пользователя"
+                name="username"
+                rules={usernameRules}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Логин"
+                name="login"
+                rules={loginRules}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Email"
+                name="email"
+                rules={[
+                  {
+                    required: true,
+                    message: "Введите email",
                   },
-                },
-              ]}
-            >
-              <Input placeholder="+79991234567" />
-            </Form.Item>
-            <Form.Item
-              label="Пароль"
-              name="password"
-              rules={passwordRules}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item
-              label="Повторите пароль"
-              name="confirmPassword"
-              dependencies={[
-                "password",
-              ]}
-              rules={[
-                {
-                  required: true,
-                  message:
-                    "Повторите пароль",
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (
-                      !value ||
-                      getFieldValue(
-                        "password"
-                      ) === value
-                    ) {
-                      return Promise.resolve()
-                    }
-
-                    return Promise.reject(
-                      new Error(
-                        "Пароли не совпадают"
-                      )
-                    )
+                  {
+                    type: "email",
+                    message:
+                      "Введите корректный email",
                   },
-                }),
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Button
-              block
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-            >
-              Зарегистрироваться
-            </Button>
-            <div
-              style={{
-                marginTop: 16,
-                textAlign: "center",
-              }}
-            >
-              Уже есть аккаунт?{" "}
-              <Link to="/login">
-                Войти
-              </Link>
-            </div>
-          </Form>
-        </Card>
-      </div>
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Телефон"
+                name="phoneNumber"
+                rules={[
+                  {
+                    validator(_, value) {
+                      if (!value) {
+                        return Promise.resolve()
+                      }
+
+                      const phoneRegex =
+                        /^(\+7\d{10}|\d{10,15})$/
+
+                      if (
+                        phoneRegex.test(value)
+                      ) {
+                        return Promise.resolve()
+                      }
+
+                      return Promise.reject(
+                        new Error(
+                          "Некорректный номер телефона"
+                        )
+                      )
+                    },
+                  },
+                ]}
+              >
+                <Input placeholder="+79991234567" />
+              </Form.Item>
+              <Form.Item
+                label="Пароль"
+                name="password"
+                rules={passwordRules}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Form.Item
+                label="Повторите пароль"
+                name="confirmPassword"
+                dependencies={[
+                  "password",
+                ]}
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      "Повторите пароль",
+                  },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (
+                        !value ||
+                        getFieldValue(
+                          "password"
+                        ) === value
+                      ) {
+                        return Promise.resolve()
+                      }
+
+                      return Promise.reject(
+                        new Error(
+                          "Пароли не совпадают"
+                        )
+                      )
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password />
+              </Form.Item>
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                loading={loading}
+              >
+                Зарегистрироваться
+              </Button>
+
+            </Form>
+          </Card>
+        </div>
+      </AuthLayout>
     </>
   )
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { tokenStorage } from "../helpers/tokenStorage";
+import { refreshTokenStorage, tokenManager } from "../helpers/tokenStorage";
 import { authApi } from "./auth.api";
 
 interface RetryConfig {
@@ -14,7 +14,7 @@ export const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-  const accessToken = tokenStorage.getAccessToken()
+  const accessToken = tokenManager.getAccessToken()
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`
@@ -46,10 +46,10 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       const refreshToken =
-        tokenStorage.getRefreshToken()
+        refreshTokenStorage.getRefreshToken()
 
       if (!refreshToken) {
-        tokenStorage.clear();
+        refreshTokenStorage.clear();
 
         window.location.href = "/login"
 
@@ -62,10 +62,13 @@ axiosInstance.interceptors.response.use(
             refreshToken,
           });
 
-        tokenStorage.setTokens(
-          response.data.accessToken,
+        tokenManager.setAccessToken(
+          response.data.accessToken
+        )
+
+        refreshTokenStorage.setRefreshTokens(
           response.data.refreshToken
-        );
+        )
 
         originalRequest.headers.Authorization =
           `Bearer ${response.data.accessToken}`
@@ -74,7 +77,8 @@ axiosInstance.interceptors.response.use(
           originalRequest
         );
       } catch (refreshError) {
-        tokenStorage.clear()
+        tokenManager.clear()
+        refreshTokenStorage.clear()
 
         window.location.href = "/login";
 

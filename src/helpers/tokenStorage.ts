@@ -1,22 +1,36 @@
-const ACCESS_TOKEN = "access_token"
 const REFRESH_TOKEN = "refresh_token"
 
-export const tokenStorage = {
+class TokenManager {
+  private accessToken: string | null = null;
+
   getAccessToken() {
-    return localStorage.getItem(ACCESS_TOKEN);
-  },
+    return this.accessToken;
+  }
+
+  setAccessToken(
+    token: string
+  ) {
+    this.accessToken = token;
+  }
+
+  clear() {
+    this.accessToken = null;
+  }
+}
+
+export const tokenManager = new TokenManager();
+
+export const refreshTokenStorage = {
 
   getRefreshToken() {
-    return localStorage.getItem(REFRESH_TOKEN);
+    return localStorage.getItem(REFRESH_TOKEN)
   },
 
-  setTokens(accessToken: string, refreshToken: string) {
-    localStorage.setItem(ACCESS_TOKEN, accessToken);
-    localStorage.setItem(REFRESH_TOKEN, refreshToken);
+  setRefreshTokens(refreshToken: string) {
+    localStorage.setItem(REFRESH_TOKEN, refreshToken)
   },
 
   clear() {
-    localStorage.removeItem(ACCESS_TOKEN);
-    localStorage.removeItem(REFRESH_TOKEN);
+    localStorage.removeItem(REFRESH_TOKEN)
   }
 }

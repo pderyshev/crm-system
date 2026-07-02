@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import type { AuthData, UserRegistration } from "../../types/auth"
 import { authApi } from "../../api/auth.api"
 import { userApi } from "../../api/user.api"
-import { tokenStorage } from "../../helpers/tokenStorage"
+import { tokenManager, refreshTokenStorage } from "../../helpers/tokenStorage"
 import axios from "axios"
 
 export const registerThunk = createAsyncThunk(
@@ -31,8 +31,11 @@ export const loginThunk = createAsyncThunk(
     try {
       const response = await authApi.signin(data)
 
-      tokenStorage.setTokens(
-        response.data.accessToken,
+      tokenManager.setAccessToken(
+        response.data.accessToken
+      )
+
+      refreshTokenStorage.setRefreshTokens(
         response.data.refreshToken
       )
 
@@ -62,7 +65,8 @@ export const logoutThunk = createAsyncThunk(
     try {
       await userApi.logout()
     } finally {
-      tokenStorage.clear()
+      tokenManager.clear()
+      refreshTokenStorage.clear()
     }
   }
 )
@@ -75,7 +79,7 @@ export const initializeAuthThunk =
         rejectWithValue,
       }
     ) => {
-      const refreshToken = tokenStorage.getRefreshToken()
+      const refreshToken = refreshTokenStorage.getRefreshToken()
 
       if (!refreshToken) {
         return null
@@ -84,8 +88,11 @@ export const initializeAuthThunk =
       try {
         const response = await authApi.refreshToken({ refreshToken })
 
-        tokenStorage.setTokens(
-          response.data.accessToken,
+        tokenManager.setAccessToken(
+          response.data.accessToken
+        )
+
+        refreshTokenStorage.setRefreshTokens(
           response.data.refreshToken
         )
 
@@ -93,7 +100,8 @@ export const initializeAuthThunk =
 
         return response.data
       } catch {
-        tokenStorage.clear()
+        tokenManager.clear()
+        refreshTokenStorage.clear()
 
         return rejectWithValue(
           "Срок действия токена истек."
