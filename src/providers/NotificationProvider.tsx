@@ -1,14 +1,12 @@
 import { notification } from "antd";
 import type { NotificationInstance } from "antd/es/notification/interface";
-import { createContext, useContext } from "react";
+import { createContext, useContext, type PropsWithChildren } from "react";
 
 const NotificationContext = createContext<NotificationInstance | null>(null)
 
 export const NotificationProvider = ({
   children,
-} : {
-  children: React.ReactNode
-}) => {
+}: PropsWithChildren) => {
   const [api, contextHolder] = notification.useNotification()
 
   return (

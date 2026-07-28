@@ -1,13 +1,11 @@
 import { Navigate } from "react-router"
 import { Spin } from "antd"
 import { useAppSelector } from "../store/hooks"
-import type { JSX } from "react"
+import type { PropsWithChildren } from "react"
 
 export const ProtectedRoute = ({
   children,
-}: {
-  children: JSX.Element
-}) => {
+}: PropsWithChildren) => {
   const {
     isAuthenticated,
     authInitialized,

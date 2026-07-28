@@ -1,14 +1,11 @@
 import { Navigate } from "react-router"
 import { useAppSelector } from "../store/hooks"
-import type { JSX } from "react"
+import type { PropsWithChildren } from "react"
 
-interface Props {
-  children: JSX.Element
-}
 
 export const PublicRoute = ({
   children,
-}: Props) => {
+}: PropsWithChildren) => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
   if (isAuthenticated) {
