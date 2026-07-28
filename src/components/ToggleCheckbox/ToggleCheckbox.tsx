@@ -1,9 +1,9 @@
 import { type FC } from "react"
 import {
   Checkbox,
-  notification
 } from "antd"
 import { updateTodo } from "../../api/todo.api"
+import { useNotification } from "../../providers/NotificationProvider"
 
 export interface CheckboxProps {
   id: number
@@ -12,7 +12,7 @@ export interface CheckboxProps {
 }
 
 export const ToggleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }) => {
-  const [api, contextHolder] = notification.useNotification()
+  const api = useNotification()
 
   const handleToggle = async () => {
     try {
@@ -28,7 +28,6 @@ export const ToggleCheckbox: FC<CheckboxProps> = ({ id, isDone, updateTodoList }
 
   return (
     <>
-      {contextHolder}
       <Checkbox
         checked={isDone}
         onChange={handleToggle}

@@ -10,7 +10,6 @@ import {
   Button,
   Form,
   Input,
-  notification
 } from "antd"
 import {
   CloseCircleOutlined,
@@ -19,6 +18,7 @@ import {
   SaveOutlined
 } from "@ant-design/icons"
 import { titleRules } from "../../helpers/rules"
+import { useNotification } from "../../providers/NotificationProvider"
 
 export interface TodoViewProps {
   todo: Todo
@@ -35,7 +35,7 @@ export const TodoItem: FC<TodoViewProps> = ({
 }) => {
   const [form] = Form.useForm<CreateTodoFormValues>()
   const [isEditing, setIsEditing] = useState(false)
-  const [api, contextHolder] = notification.useNotification()
+  const api = useNotification()
 
   const handleDeleteTodo = async () => {
     try {
@@ -82,7 +82,6 @@ export const TodoItem: FC<TodoViewProps> = ({
 
   return (
     <>
-      {contextHolder}
       {isEditing ? (
       <Form
         form={form}

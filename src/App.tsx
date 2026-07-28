@@ -15,57 +15,60 @@ import { RegisterPage } from "./pages/RegisterPage/RegisterPage"
 import { ProtectedRoute } from "./routes/ProtectedRoute"
 import { PublicRoute } from "./routes/PublicRoute"
 import { AuthInitializer } from "./store/auth/AuthInitializer"
+import { NotificationProvider } from "./providers/NotificationProvider"
 
 function App() {
   return (
     <Provider store={store}>
       <AuthInitializer />
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <RegisterPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <MainLayout />
-              </ProtectedRoute>
-            }
-          >
+      <NotificationProvider>
+        <BrowserRouter>
+          <Routes>
             <Route
-              index
+              path="/login"
               element={
-                <Navigate
-                  to="/todos"
-                  replace
-                />
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
               }
             />
             <Route
-              path="todos"
-              element={<TodoPage />}
+              path="/register"
+              element={
+                <PublicRoute>
+                  <RegisterPage />
+                </PublicRoute>
+              }
             />
             <Route
-              path="profile"
-              element={<UserPage />}
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <MainLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route
+                index
+                element={
+                  <Navigate
+                    to="/todos"
+                    replace
+                  />
+                }
+              />
+              <Route
+                path="todos"
+                element={<TodoPage />}
+              />
+              <Route
+                path="profile"
+                element={<UserPage />}
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </NotificationProvider>
     </Provider>
   )
 }

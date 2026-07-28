@@ -4,7 +4,6 @@ import {
   Card,
   Form,
   Input,
-  notification,
   Typography,
 } from "antd"
 import { Link, useNavigate } from "react-router"
@@ -13,6 +12,7 @@ import { registerThunk } from "../../store/auth/authThunks"
 import { loginRules, passwordRules, usernameRules } from "../../helpers/rules"
 import { AuthLayout } from "../../layouts/FormLayots/FormLayout"
 import "./registerPage.scss"
+import { useNotification } from "../../providers/NotificationProvider"
 
 const { Title } = Typography
 
@@ -30,7 +30,7 @@ export const RegisterPage = () => {
   const navigate = useNavigate()
   const [form] = Form.useForm<RegisterFormValues>()
   const [isLoading, setIsLoading] = useState(false)
-  const [api, contextHolder] = notification.useNotification()
+  const api = useNotification()
 
   const handleSubmit = async (
     values: RegisterFormValues
@@ -95,7 +95,6 @@ export const RegisterPage = () => {
 
   return (
     <>
-      {contextHolder}
       <AuthLayout
         footer={
           <div className="register-page__footer">

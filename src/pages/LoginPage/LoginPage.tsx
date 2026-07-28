@@ -5,7 +5,6 @@ import {
   Form,
   Input,
   Typography,
-  notification,
 } from "antd"
 import { Link, useNavigate } from "react-router"
 import { useAppDispatch } from "../../store/hooks"
@@ -13,6 +12,7 @@ import { loginThunk } from "../../store/auth/authThunks"
 import { loginRules, passwordRules } from "../../helpers/rules"
 import { AuthLayout } from "../../layouts/FormLayots/FormLayout"
 import "./loginPage.scss"
+import { useNotification } from "../../providers/NotificationProvider"
 
 const { Title } = Typography
 
@@ -25,13 +25,14 @@ export const LoginPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [form] = Form.useForm<LoginFormValues>()
-  const [api, contextHolder] = notification.useNotification()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [errorType, setErrorType] = useState<"unauthorized" | "badRequest" | "server" | null>(null)
 
+  const api = useNotification();
+
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess) { 
       api.success({
         title: "Успешный вход",
         description: "Добро пожаловать!",
@@ -93,7 +94,6 @@ export const LoginPage = () => {
 
   return (
     <>
-      {contextHolder}
       <AuthLayout
         footer={
           <div className="login-page__footer">

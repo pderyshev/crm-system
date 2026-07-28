@@ -4,8 +4,8 @@ import {
   Button,
   Form,
   Input,
-  notification
 } from "antd"
+import { useNotification } from "../../providers/NotificationProvider"
 
 interface CreateTodoProps {
   onTodoCreated: () => void
@@ -17,7 +17,7 @@ interface CreateTodoFormValues {
 
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
   const [form] = Form.useForm<CreateTodoFormValues>()
-  const [api, contextHolder] = notification.useNotification()
+  const api = useNotification()
 
   const handleFinish = async (values: CreateTodoFormValues) => {
     const { title } = values
@@ -36,7 +36,6 @@ export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
 
   return (
     <>
-      {contextHolder}
       <Form
         form={form}
         style={{
