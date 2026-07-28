@@ -18,7 +18,7 @@ export const AuthLayout: FC<Props> = ({
           <img
             className="form-layout__banner-image"
             src={formImage}
-            alt="Баннер"
+            alt=""
           />
         </div>
         <div className="form-layout__content">
