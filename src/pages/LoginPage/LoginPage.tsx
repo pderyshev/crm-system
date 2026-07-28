@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   Button,
   Card,
@@ -17,8 +17,8 @@ import { useNotification } from "../../providers/NotificationProvider"
 const { Title } = Typography
 
 interface LoginFormValues {
-  login: string;
-  password: string;
+  login: string
+  password: string
 }
 
 export const LoginPage = () => {
@@ -26,43 +26,9 @@ export const LoginPage = () => {
   const navigate = useNavigate()
   const [form] = Form.useForm<LoginFormValues>()
   const [isLoading, setIsLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [errorType, setErrorType] = useState<"unauthorized" | "badRequest" | "server" | null>(null)
 
-  const api = useNotification();
+  const api = useNotification()
 
-  useEffect(() => {
-    if (isSuccess) { 
-      api.success({
-        title: "Успешный вход",
-        description: "Добро пожаловать!",
-      });
-      setIsSuccess(false)
-      navigate("/")
-    }
-  }, [isSuccess, api, navigate])
-
-  useEffect(() => {
-    if (errorType) {
-      if (errorType === "unauthorized") {
-        api.error({
-          title: "Ошибка авторизации",
-          description: "Неверный логин или пароль.",
-        })
-      } else if (errorType === "badRequest") {
-        api.error({
-          title: "Некорректные данные",
-          description: "Проверьте правильность заполнения формы.",
-        })
-      } else if (errorType === "server") {
-        api.error({
-          title: "Ошибка сервера",
-          description: "Попробуйте повторить попытку позже.",
-        })
-      }
-      setErrorType(null)
-    }
-  }, [errorType, api])
 
   const handleSubmit = async (values: LoginFormValues) => {
     try {
@@ -75,22 +41,41 @@ export const LoginPage = () => {
         })
       ).unwrap()
 
-      setIsSuccess(true)
+      api.success({
+        title: "Успешный вход",
+        description: "Добро пожаловать!",
+      })
+
+      navigate("/")
     } catch (error) {
       const status = error as number
 
-      if (status === 401) {
-        setErrorType("unauthorized")
-      } else if (status === 400) {
-        setErrorType("badRequest")
-      } else {
-        setErrorType("server")
+      switch (status) {
+        case 401:
+          api.error({
+            title: "Ошибка авторизации",
+            description: "Неверный логин или пароль.",
+          })
+          break
+
+        case 400:
+          api.error({
+            title: "Некорректные данные",
+            description: "Проверьте правильность заполнения формы.",
+          })
+          break
+
+        default:
+          api.error({
+            title: "Ошибка сервера",
+            description: "Попробуйте повторить попытку позже.",
+          })
       }
     }
     finally {
       setIsLoading(false)
     }
-  };
+  }
 
   return (
     <>
