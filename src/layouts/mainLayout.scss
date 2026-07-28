@@ -12,9 +12,9 @@
     align-items: center;
     justify-content: center;
   }
+}
 
-  div {
-    display: flex;
-    flex-direction: column;
-  }
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
 }
