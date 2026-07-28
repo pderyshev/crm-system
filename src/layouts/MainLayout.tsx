@@ -41,7 +41,7 @@ const MainLayout = () => {
   const dispatch = useAppDispatch()
 
   const handleLogout = async () => {
-    await dispatch(logoutThunk()).unwrap();
+    await dispatch(logoutThunk());
     navigate("/login");
   }
 
