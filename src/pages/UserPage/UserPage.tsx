@@ -10,13 +10,13 @@ export default function UserPage() {
 
   const dispatch = useAppDispatch()
   const profile = useAppSelector(selectProfileData)
-  const loading = useAppSelector(selectProfileLoading)
+  const isLoading = useAppSelector(selectProfileLoading)
   
   useEffect(() => {
     dispatch(fetchProfileThunk())
   }, [dispatch])
 
-  if(loading) {
+  if(isLoading) {
     return <Spin size="large" />
   }
   
