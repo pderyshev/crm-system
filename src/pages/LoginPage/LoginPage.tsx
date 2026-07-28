@@ -26,20 +26,20 @@ export const LoginPage = () => {
   const navigate = useNavigate()
   const [form] = Form.useForm<LoginFormValues>()
   const [api, contextHolder] = notification.useNotification()
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [errorType, setErrorType] = useState<"unauthorized" | "badRequest" | "server" | null>(null)
 
   useEffect(() => {
-    if (success) {
+    if (isSuccess) {
       api.success({
         title: "Успешный вход",
         description: "Добро пожаловать!",
       });
-      setSuccess(false)
+      setIsSuccess(false)
       navigate("/")
     }
-  }, [success, api, navigate])
+  }, [isSuccess, api, navigate])
 
   useEffect(() => {
     if (errorType) {
@@ -65,7 +65,7 @@ export const LoginPage = () => {
 
   const handleSubmit = async (values: LoginFormValues) => {
     try {
-      setLoading(true)
+      setIsLoading(true)
 
       await dispatch(
         loginThunk({
@@ -74,7 +74,7 @@ export const LoginPage = () => {
         })
       ).unwrap()
 
-      setSuccess(true)
+      setIsSuccess(true)
     } catch (error) {
       const status = error as number
 
@@ -87,7 +87,7 @@ export const LoginPage = () => {
       }
     }
     finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   };
 
@@ -132,7 +132,7 @@ export const LoginPage = () => {
                 type="primary"
                 htmlType="submit"
                 block
-                loading={loading}
+                loading={isLoading}
               >
                 Войти
               </Button>

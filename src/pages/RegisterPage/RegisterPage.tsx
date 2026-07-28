@@ -29,14 +29,14 @@ export const RegisterPage = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [form] = Form.useForm<RegisterFormValues>()
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [api, contextHolder] = notification.useNotification()
 
   const handleSubmit = async (
     values: RegisterFormValues
   ) => {
     try {
-      setLoading(true)
+      setIsLoading(true)
 
       await dispatch(
         registerThunk({
@@ -89,7 +89,7 @@ export const RegisterPage = () => {
       })
     }
     finally {
-      setLoading(false)
+      setIsLoading(false)
     }
   }
 
@@ -224,7 +224,7 @@ export const RegisterPage = () => {
                 block
                 type="primary"
                 htmlType="submit"
-                loading={loading}
+                loading={isLoading}
               >
                 Зарегистрироваться
               </Button>
