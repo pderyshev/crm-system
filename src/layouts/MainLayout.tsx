@@ -41,15 +41,15 @@ const MainLayout = () => {
   const dispatch = useAppDispatch()
 
   const handleLogout = async () => {
-  await dispatch(logoutThunk()).unwrap();
-  navigate("/login");
-}
+    await dispatch(logoutThunk()).unwrap();
+    navigate("/login");
+  }
 
   return (
     <Layout hasSider>
       <Sider style={siderStyle} className="sider-menu">
         <Menu
-        className="sider-menu"
+          className="sider-menu__wrapper"
           theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}
