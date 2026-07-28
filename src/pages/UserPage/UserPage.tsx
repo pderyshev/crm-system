@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchProfileThunk } from "../../store/auth/authThunks"
 import { Card, Descriptions, Spin, Typography } from "antd"
-import { selectProfileData, selectProfileLoading } from "../../store/auth/selector"
+import { selectProfileData, selectProfileLoading } from "../../store/auth/selectors"
 
 const { Title } = Typography
 
