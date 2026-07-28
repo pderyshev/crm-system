@@ -24,47 +24,35 @@ function App() {
       <NotificationProvider>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <LoginPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <PublicRoute>
-                  <RegisterPage />
-                </PublicRoute>
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <MainLayout />
-                </ProtectedRoute>
-              }
-            >
+            <Route element={<PublicRoute />}>
               <Route
-                index
-                element={
-                  <Navigate
-                    to="/todos"
-                    replace
-                  />
-                }
+                path="/login"
+                element={<LoginPage />}
               />
               <Route
-                path="todos"
-                element={<TodoPage />}
+                path="/register"
+                element={<RegisterPage />}
               />
+            </Route>
+
+            <Route element={<ProtectedRoute />}>
               <Route
-                path="profile"
-                element={<UserPage />}
-              />
+                path="/"
+                element={<MainLayout />}
+              >
+                <Route
+                  index
+                  element={<Navigate to="/todos" replace />}
+                />
+                <Route
+                  path="todos"
+                  element={<TodoPage />}
+                />
+                <Route
+                  path="profile"
+                  element={<UserPage />}
+                />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
