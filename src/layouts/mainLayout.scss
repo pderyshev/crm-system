@@ -1,0 +1,20 @@
+.sider-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,4 +1,4 @@
-import { axiosInstance } from "./axios";
+import { axiosInstance } from "./axios"
 
 import type {
   Todo,
@@ -6,7 +6,7 @@ import type {
   FilterTodo,
   MetaResponse,
   TodoInfo
-} from "../types/todo";
+} from "../types/todo"
 
 export async function getTodos(filterTodo: FilterTodo):Promise<MetaResponse<Todo, TodoInfo>> {
   const response = await axiosInstance.get("todos", {
@@ -15,13 +15,13 @@ export async function getTodos(filterTodo: FilterTodo):Promise<MetaResponse<Todo
     },
   });
 
-  return response.data;
+  return response.data
 }
 
 export async function deleteTodo(
   id: number
 ): Promise<void> {
-  await axiosInstance.delete(`todos/${id}`);
+  await axiosInstance.delete(`todos/${id}`)
 }
 
 export async function createTodo(
@@ -32,7 +32,7 @@ export async function createTodo(
     todoRequest
   );
 
-  return response.data;
+  return response.data
 }
 
 export async function updateTodo(
@@ -44,5 +44,5 @@ export async function updateTodo(
     todoRequest
   );
 
-  return response.data;
+  return response.data
 }

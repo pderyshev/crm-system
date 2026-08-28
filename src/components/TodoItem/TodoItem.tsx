@@ -1,173 +1,166 @@
-import { useState, type FC } from "react";
-import { ToggleCheckbox } from "../ToggleCheckbox/ToggleCheckbox";
+import { useState, type FC } from "react"
+import { ToggleCheckbox } from "../ToggleCheckbox/ToggleCheckbox"
 import "./TodoItem.scss"
-import type { Todo } from "../../types/todo";
+import type { Todo } from "../../types/todo"
 import {
   deleteTodo,
   updateTodo
-} from "../../api/todo.api";
+} from "../../api/todo.api"
 import {
   Button,
   Form,
   Input,
-  notification,
-  Typography
-} from "antd";
+} from "antd"
 import {
   CloseCircleOutlined,
   DeleteOutlined,
   EditOutlined,
   SaveOutlined
-} from "@ant-design/icons";
-import { titleRules } from "../../helpers/rules";
+} from "@ant-design/icons"
+import { titleRules } from "../../helpers/rules"
+import { useNotification } from "../../providers/NotificationProvider"
 
 export interface TodoViewProps {
-  todo: Todo;
-  updateTodoList: () => void;
+  todo: Todo
+  updateTodoList: () => void
 }
 
 interface CreateTodoFormValues {
-  title: string;
+  title: string
 }
 
 export const TodoItem: FC<TodoViewProps> = ({
   todo,
   updateTodoList
 }) => {
-  const [form] = Form.useForm<CreateTodoFormValues>();
-  const [isEditing, setIsEditing] = useState(false);
-  const [api, contextHolder] = notification.useNotification();
-  const { Text } = Typography;
+  const [form] = Form.useForm<CreateTodoFormValues>()
+  const [isEditing, setIsEditing] = useState(false)
+  const api = useNotification()
 
   const handleDeleteTodo = async () => {
     try {
       await deleteTodo(todo.id)
-      updateTodoList();
+      updateTodoList()
     } catch {
       api.error({
         title: "Ошибка при удалении задачи",
         description: "Не удалось удалить задачу. Пожалуйста, попробуйте снова."
-      });
+      })
     }
   }
 
   const handleStartEdit = () => {
     form.setFieldsValue({
       title: todo.title
-    });
-    setIsEditing(true);
+    })
+    setIsEditing(true)
   };
 
   const handleCancelEdit = () => {
     form.resetFields()
-    setIsEditing(false);
+    setIsEditing(false)
   }
 
   const handleSaveEdit = async () => {
     try {
-      const values = await form.validateFields();
+      const values = await form.validateFields()
 
       await updateTodo(todo.id, {
         title: values.title.trim(),
       });
 
-      setIsEditing(false);
+      setIsEditing(false)
 
-      updateTodoList();
+      updateTodoList()
     } catch {
       api.error({
         title: "Ошибка при сохранении изменений",
         description: "Не удалось сохранить изменения. Пожалуйста, попробуйте снова."
-      });
+      })
     }
   }
 
   return (
     <>
-      {contextHolder}
       {isEditing ? (
-        <Form
-          form={form}
-          onFinish={handleSaveEdit}
-          className="todos__item-wrapper"
-        >
-          <div className="todos__item-left">
-            <ToggleCheckbox
-              id={todo.id}
-              isDone={todo.isDone}
-              updateTodoList={updateTodoList}
-            />
-
-            <div className="todos__edit-warpper">
-              <div className="todos__edit-container">
-                <Form.Item
-                  name="title"
-                  rules={titleRules}
-                  style={{ marginBottom: 0 }}
-                >
-                  <Input />
-                </Form.Item>
-              </div>
-            </div>
-          </div>
-
-          <div className="todos__inner">
-            <Button
-              htmlType="submit"
-              type="primary"
-              size="large"
-              icon={<SaveOutlined />}
-            />
-
-            <Button
-              htmlType="button"
-              onClick={handleCancelEdit}
-              type="primary"
-              danger
-              size="large"
-              icon={<CloseCircleOutlined />}
-            />
-          </div>
-        </Form>
-      ) : (
-        <div className="todos__item-wrapper">
-          <div className="todos__item-left">
-            <ToggleCheckbox
-              id={todo.id}
-              isDone={todo.isDone}
-              updateTodoList={updateTodoList}
-            />
-
-            <div className="todos__edit-warpper">
-              <Text
-                className="todos__title"
-                delete={todo.isDone}
+      <Form
+        form={form}
+        onFinish={handleSaveEdit}
+        className="todos__item-wrapper"
+      >
+        <div className="todos__item-left">
+          <ToggleCheckbox
+            id={todo.id}
+            isDone={todo.isDone}
+            updateTodoList={updateTodoList}
+          />
+          <div className="todos__edit-warpper">
+            <div className="todos__edit-container">
+              <Form.Item
+                name="title"
+                rules={titleRules}
+                style={{ marginBottom: 0 }}
               >
-                {todo.title}
-              </Text>
+                <Input />
+              </Form.Item>
             </div>
-          </div>
-
-          <div className="todos__inner">
-            <Button
-              htmlType="button"
-              onClick={handleStartEdit}
-              type="primary"
-              size="large"
-              icon={<EditOutlined />}
-            />
-
-            <Button
-              htmlType="button"
-              onClick={handleDeleteTodo}
-              type="primary"
-              danger
-              size="large"
-              icon={<DeleteOutlined />}
-            />
           </div>
         </div>
-      )}
+        <div className="todos__inner">
+          <Button
+            htmlType="submit"
+            type="primary"
+            size="large"
+            icon={<SaveOutlined />}
+          />
+          <Button
+            htmlType="button"
+            onClick={handleCancelEdit}
+            type="primary"
+            danger
+            size="large"
+            icon={<CloseCircleOutlined />}
+          />
+        </div>
+      </Form>
+    ) : (
+      <div className="todos__item-wrapper">
+        <div className="todos__item-left">
+          <ToggleCheckbox
+            id={todo.id}
+            isDone={todo.isDone}
+            updateTodoList={updateTodoList}
+          />
+          <div className="todos__edit-warpper">
+            <span
+              className="todos__title"
+              style={{
+                textDecoration: todo.isDone ? "line-through" : "none",
+              }}
+            >
+              {todo.title}
+            </span>
+          </div>
+        </div>
+        <div className="todos__inner">
+          <Button
+            htmlType="button"
+            onClick={handleStartEdit}
+            type="primary"
+            size="large"
+            icon={<EditOutlined />}
+          />
+          <Button
+            htmlType="button"
+            onClick={handleDeleteTodo}
+            type="primary"
+            danger
+            size="large"
+            icon={<DeleteOutlined />}
+          />
+        </div>
+      </div>
+    )}
     </>
-  );
+  )
 }
