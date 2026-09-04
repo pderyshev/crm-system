@@ -1,0 +1,9 @@
+.create-todo-form {
+  max-width: 600px;
+  display: flex;
+  gap: 10px;
+
+  &__input {
+    flex: 1
+  }
+}

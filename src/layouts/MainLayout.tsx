@@ -1,53 +1,71 @@
-import React from "react"
+import { useMemo } from "react"
 import { Button, Layout, Menu } from "antd"
 import type { MenuProps } from "antd"
 import {
   Outlet,
   useLocation,
-  useNavigate
+  useNavigate,
 } from "react-router"
-import { useAppDispatch } from "../store/hooks"
+
+import { useAppDispatch, useAppSelector } from "../store/hooks"
 import { logoutThunk } from "../store/auth/authThunks"
+import { selectProfile } from "../store/auth/selectors"
+
 import "./mainLayout.scss"
+import { Roles } from "../types/admin"
 
 const { Content, Sider } = Layout
 
-const siderStyle: React.CSSProperties = {
-  overflow: "auto",
-  height: "100vh",
-  position: "sticky",
-  insetInlineStart: 0,
-  top: 0,
-  scrollbarWidth: "thin",
-  scrollbarGutter: "stable",
-}
-
-const items: MenuProps["items"] = [
-  {
-    label: "Список задач",
-    key: "/todos",
-  },
-  {
-    label: "Личный кабинет",
-    key: "/profile",
-  },
-]
-
 const MainLayout = () => {
-  const navigate = useNavigate();
-
-  const location = useLocation();
-
+  const navigate = useNavigate()
+  const location = useLocation()
   const dispatch = useAppDispatch()
 
+  const profileState = useAppSelector(selectProfile)
+  const profile = profileState.data
+
+  const isAdminOrModerator = useMemo(() => {
+    if (!profile) {
+      return false
+    }
+
+    return (
+      profile?.roles.includes(Roles.ADMIN) ||
+      profile?.roles.includes(Roles.MODERATOR)
+    )
+  }, [profile])
+
+  const items: MenuProps["items"] = [
+    {
+      key: "/todos",
+      label: "Список задач",
+    },
+    {
+      key: "/profile",
+      label: "Личный кабинет",
+    },
+
+    ...(isAdminOrModerator
+      ? [
+        {
+          key: "/users",
+          label: "Пользователи",
+        },
+      ]
+      : []),
+  ]
+
   const handleLogout = async () => {
-    await dispatch(logoutThunk());
-    navigate("/login");
+    await dispatch(logoutThunk())
+
+    navigate("/login")
   }
 
   return (
     <Layout hasSider>
-      <Sider style={siderStyle} className="sider-menu">
+      <Sider
+        className="sider-menu"
+      >
         <Menu
           className="sider-menu__wrapper"
           theme="dark"
@@ -56,20 +74,19 @@ const MainLayout = () => {
           items={items}
           onClick={({ key }) => navigate(key)}
         />
+
         <Button
-          onClick={handleLogout}
-          type="primary"
           danger
+          type="primary"
           size="large"
-        >Выйти</Button>
-      </Sider>
-      <Layout>
-        <Content
-          style={{
-            margin: "24px 16px 0",
-            overflow: "initial",
-          }}
+          onClick={handleLogout}
         >
+          Выйти
+        </Button>
+      </Sider>
+
+      <Layout>
+        <Content className="sider-menu__content">
           <Outlet />
         </Content>
       </Layout>

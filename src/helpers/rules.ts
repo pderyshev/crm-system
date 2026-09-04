@@ -1,4 +1,4 @@
-const MIN_TODO_LENGTH = 2
+const MIN_TODO_LENGTH = 4
 const MAX_TODO_LENGTH = 64
 
 const MIN_LOGIN_LENGTH = 2
@@ -38,9 +38,9 @@ export const loginRules = [{
   message: `Максимальная длина логина ${MAX_LOGIN_LENGTH} символов`,
 },
 {
-  pattern: /^[A-Za-z]+$/,
-  message: "Только латинские буквы",
-},
+    pattern: /^[A-Za-z0-9_.-]+$/,
+    message: "Только латинские буквы, цифры и символы _ . -",
+  },
 ]
 
 export const passwordRules = [

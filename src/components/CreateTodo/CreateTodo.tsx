@@ -1,11 +1,14 @@
 import { titleRules } from "../../helpers/rules"
-import { createTodo } from "../../api/todo.api"
+import { createTask } from "../../api/todo.api"
 import {
   Button,
   Form,
   Input,
 } from "antd"
 import { useNotification } from "../../providers/NotificationProvider"
+import { useAppSelector } from "../../store/hooks"
+import { selectProfileData } from "../../store/auth/selectors"
+import "./createTodo.scss"
 
 interface CreateTodoProps {
   onTodoCreated: () => void
@@ -18,37 +21,41 @@ interface CreateTodoFormValues {
 export const CreateTodo = ({ onTodoCreated }: CreateTodoProps) => {
   const [form] = Form.useForm<CreateTodoFormValues>()
   const api = useNotification()
+  const profile = useAppSelector(selectProfileData)
 
-  const handleFinish = async (values: CreateTodoFormValues) => {
-    const { title } = values
-
+  const handleFinish = async (values: any) => {
     try {
-      await createTodo({ title: title, isDone: false })
-      form.resetFields()
-      onTodoCreated()
+      if (!profile?.id) {
+        api.error({
+          title: "Ошибка",
+          description: "Не удалось определить текущего пользователя"
+        })
+        return
+      }
+
+      await createTask({
+        title: values.title,
+        description: values.description,
+        executorId: profile.id
+      });
+      form.resetFields();
+      onTodoCreated();
     } catch {
-      api.error({
-        title: "Ошибка при создании задачи",
-        description: `Не удалось создать задачу "${title}". Пожалуйста, попробуйте снова.`
-      })
+      api.error({ title: "Ошибка", description: "Не удалось создать задачу" });
     }
-  }
+  };
 
   return (
     <>
       <Form
         form={form}
-        style={{
-          maxWidth: 600,
-          display: "flex",
-          gap: "10px",
-        }}
         onFinish={handleFinish}
+        className="create-todo-form"
       >
         <Form.Item
           name="title"
-          style={{ flex: 1 }}
           rules={titleRules}
+          className="create-todo-form__input"
         >
           <Input
             placeholder="Введите задачу"

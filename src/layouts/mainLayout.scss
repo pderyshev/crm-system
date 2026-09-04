@@ -4,6 +4,13 @@
   gap: 15px;
   align-items: center;
   justify-content: center;
+  overflow: auto;
+  height: 100vh;
+  position: sticky;
+  inset-inline-start: 0;
+  top: 0;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
 
   &__wrapper {
     display: flex;
@@ -11,6 +18,11 @@
     gap: 15px;
     align-items: center;
     justify-content: center;
+  }
+
+  &__content {
+    margin: 24px 16px 0;
+    overflow: initial;
   }
 }
 

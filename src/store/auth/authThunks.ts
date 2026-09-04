@@ -4,6 +4,7 @@ import { authApi } from "../../api/auth.api"
 import { userApi } from "../../api/user.api"
 import { tokenManager, refreshTokenStorage } from "../../helpers/tokenStorage"
 import axios from "axios"
+import type { Profile } from "../../types/user"
 
 export const registerThunk = createAsyncThunk(
   "auth/register",
@@ -29,28 +30,29 @@ export const loginThunk = createAsyncThunk(
   "auth/login",
   async (data: AuthData, { rejectWithValue }) => {
     try {
-      const response = await authApi.signin(data)
+      const response = await authApi.signin(data);
 
-      tokenManager.setAccessToken(
-        response.data.accessToken
-      )
+      const accessToken = response.data.AccessToken;
+      const refreshToken = response.data.RefreshToken;
 
-      refreshTokenStorage.setRefreshTokens(
-        response.data.refreshToken
-      )
-
-      return response.data
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(error.response?.status)
+      if (!accessToken || !refreshToken) {
+        throw new Error("Токены не получены");
       }
 
-      return rejectWithValue(500)
+      tokenManager.setAccessToken(accessToken);
+      refreshTokenStorage.setRefreshTokens(refreshToken);
+
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(error.response?.status);
+      }
+      return rejectWithValue(500);
     }
   }
-)
+);
 
-export const fetchProfileThunk = createAsyncThunk(
+export const fetchProfileThunk = createAsyncThunk<Profile, void>(
   "user/profile",
   async () => {
     const response = await userApi.profile()
@@ -63,7 +65,10 @@ export const logoutThunk = createAsyncThunk(
   "user/logout",
   async () => {
     try {
-      await userApi.logout()
+      const refrheshToken = refreshTokenStorage.getRefreshToken();
+      if (refrheshToken) {
+        await userApi.logout(refrheshToken)
+      }
     } finally {
       tokenManager.clear()
       refreshTokenStorage.clear()
@@ -71,41 +76,32 @@ export const logoutThunk = createAsyncThunk(
   }
 )
 
-export const initializeAuthThunk =
-  createAsyncThunk(
-    "auth/initialize",
-    async (_, {
-        dispatch,
-        rejectWithValue,
-      }
-    ) => {
-      const refreshToken = refreshTokenStorage.getRefreshToken()
-
-      if (!refreshToken) {
-        return null
-      }
-
-      try {
-        const response = await authApi.refreshToken({ refreshToken })
-
-        tokenManager.setAccessToken(
-          response.data.accessToken
-        )
-
-        refreshTokenStorage.setRefreshTokens(
-          response.data.refreshToken
-        )
-
-        await dispatch(fetchProfileThunk())
-
-        return response.data
-      } catch {
-        tokenManager.clear()
-        refreshTokenStorage.clear()
-
-        return rejectWithValue(
-          "Срок действия токена истек."
-        )
-      }
+export const initializeAuthThunk = createAsyncThunk(
+  "auth/initialize",
+  async (_, { dispatch, rejectWithValue }) => {
+    const refreshToken = refreshTokenStorage.getRefreshToken();
+    if (!refreshToken) {
+      return null;
     }
-  )
+    try {
+      const response = await authApi.refreshToken({ refreshToken });
+
+      const accessToken = response.data.AccessToken;
+      const newRefreshToken = response.data.RefreshToken;
+
+      if (!accessToken || !newRefreshToken) {
+        throw new Error("Не удалось обновить токены");
+      }
+
+      tokenManager.setAccessToken(accessToken);
+      refreshTokenStorage.setRefreshTokens(newRefreshToken);
+
+      await dispatch(fetchProfileThunk());
+      return response.data;
+    } catch {
+      tokenManager.clear();
+      refreshTokenStorage.clear();
+      return rejectWithValue("Срок действия токена истек.");
+    }
+  }
+);

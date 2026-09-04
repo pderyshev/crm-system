@@ -16,6 +16,6 @@ export interface RefreshToken {
 }
 
 export interface Token {
- accessToken: string
- refreshToken: string
+ AccessToken: string
+ RefreshToken: string
 }
