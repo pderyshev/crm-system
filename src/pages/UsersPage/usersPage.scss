@@ -1,0 +1,16 @@
+.users-page {
+  &__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  &__search {
+    width: 300px;
+  }
+
+  &__filter {
+    width: 220px;
+  }
+}

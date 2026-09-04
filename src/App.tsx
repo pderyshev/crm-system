@@ -16,6 +16,8 @@ import { ProtectedRoute } from "./routes/ProtectedRoute"
 import { PublicRoute } from "./routes/PublicRoute"
 import { AuthInitializer } from "./store/auth/AuthInitializer"
 import { NotificationProvider } from "./providers/NotificationProvider"
+import UsersPage from "./pages/UsersPage/UsersPage"
+import UserDetailsPage from "./pages/UserDetailsPage/UserDetailsPage"
 
 function App() {
   return (
@@ -52,7 +54,16 @@ function App() {
                   path="profile"
                   element={<UserPage />}
                 />
+                <Route
+                  path="users"
+                  element={<UsersPage />}
+                />
+                <Route 
+                  path="users/:id"
+                  element={<UserDetailsPage />}
+                />
               </Route>
+
             </Route>
           </Routes>
         </BrowserRouter>

@@ -10,7 +10,7 @@ interface RetryConfig {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: "https://easydev.club/api/v1/",
+  baseURL: "https://tech-mindset.ru/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -38,19 +38,15 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const isUnauthorized =
-      error.response?.status === 401;
+    const isUnauthorized = error.response?.status === 401;
 
     const url = originalRequest.url ?? "";
 
-    const isRefreshRequest =
-      url.includes("/auth/refresh");
+    const isRefreshRequest = url.includes("/auth/refresh");
 
-    const isLoginRequest =
-      url.includes("/auth/signin");
+    const isLoginRequest = url.includes("/auth/signin");
 
-    const isRegisterRequest =
-      url.includes("/auth/signup");
+    const isRegisterRequest = url.includes("/auth/signup");
 
     if (
       !isUnauthorized ||
@@ -64,8 +60,7 @@ axiosInstance.interceptors.response.use(
 
     originalRequest._retry = true;
 
-    const refreshToken =
-      refreshTokenStorage.getRefreshToken();
+    const refreshToken = refreshTokenStorage.getRefreshToken();
 
     if (!refreshToken) {
       tokenManager.clear();
@@ -77,22 +72,15 @@ axiosInstance.interceptors.response.use(
     }
 
     try {
-      const response =
-        await authApi.refreshToken({
-          refreshToken,
-        });
+      const response = await authApi.refreshToken({ refreshToken, });
 
-      tokenManager.setAccessToken(
-        response.data.accessToken
-      );
+      tokenManager.setAccessToken(response.data.AccessToken);
 
-      refreshTokenStorage.setRefreshTokens(
-        response.data.refreshToken
-      );
+      refreshTokenStorage.setRefreshTokens(response.data.RefreshToken);
 
       originalRequest.headers = {
         ...originalRequest.headers,
-        Authorization: `Bearer ${response.data.accessToken}`,
+        Authorization: `Bearer ${response.data.AccessToken}`,
       };
 
       return axiosInstance(originalRequest);

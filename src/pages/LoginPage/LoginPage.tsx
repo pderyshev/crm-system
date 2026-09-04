@@ -8,7 +8,7 @@ import {
 } from "antd"
 import { Link, useNavigate } from "react-router"
 import { useAppDispatch } from "../../store/hooks"
-import { loginThunk } from "../../store/auth/authThunks"
+import { fetchProfileThunk, loginThunk } from "../../store/auth/authThunks"
 import { loginRules, passwordRules } from "../../helpers/rules"
 import { AuthLayout } from "../../layouts/FormLayots/FormLayout"
 import "./loginPage.scss"
@@ -46,7 +46,9 @@ export const LoginPage = () => {
         description: "Добро пожаловать!",
       })
 
-      navigate("/")
+      await dispatch(fetchProfileThunk()).unwrap()
+
+      navigate("/todos")
     } catch (error) {
       const status = error as number
 

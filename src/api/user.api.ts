@@ -3,10 +3,10 @@ import type { Profile } from "../types/user"
 
 export const userApi = {
   profile() {
-    return axiosInstance.get<Profile>("/user/profile")
+    return axiosInstance.get<Profile>("/users/profile")
   },
 
-  logout() {
-    return axiosInstance.post("/user/logout")
-  }
+  logout(refreshToken: string) {
+    return axiosInstance.post("/auth/logout", { RefreshToken: refreshToken });
+}
 }

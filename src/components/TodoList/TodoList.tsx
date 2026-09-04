@@ -1,24 +1,22 @@
-import { type FC } from "react"
-import { TodoItem } from "../TodoItem/TodoItem"
-import type { Todo, } from "../../types/todo"
-import "./todoList.scss"
+import { type Task } from "../../types/todo";
+import { TodoItem } from "../TodoItem/TodoItem";
+import "./todoList.scss";
 
-export interface TodoListProps {
-  todoList: Todo[]
-  updateTodoList: () => void
+interface Props {
+  tasks: Task[];
+  loading: boolean;
+  updateTodoList: () => void;
 }
 
-export const TodoListView: FC<TodoListProps> = ({ todoList, updateTodoList }) => {
+export const TodoListView = ({ tasks, loading, updateTodoList }: Props) => {
+  if (loading) return <div>Загрузка...</div>;
   return (
     <ul className="todos__list">
-      {todoList.map(todo => (
-        <li className="todos__item" key={todo.id}>
-          <TodoItem
-            todo={todo}
-            updateTodoList={updateTodoList}
-          />
+      {tasks.map((task) => (
+        <li className="todos__item" key={task.id}>
+          <TodoItem task={task} updateTodoList={updateTodoList} />
         </li>
       ))}
     </ul>
-  )
-}
+  );
+};
